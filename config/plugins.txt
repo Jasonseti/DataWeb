@@ -1,0 +1,3 @@
+HTML: React
+CSS: PostCSS, Tailwind
+JS: ESLint, Typescript
