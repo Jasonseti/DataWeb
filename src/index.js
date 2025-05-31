@@ -2,8 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import reportWebVitals from "./reportWebVitals";
 import json_data from "./PlayerIndex_nba_stats.json";
-import SideBar from "./SideBar";
-import DataBase from "./DataBase";
+import SideBar from "./components/SideBar";
+import DataBase from "./components/DataBase";
 
 const bar_titles = {
   Home: [],
