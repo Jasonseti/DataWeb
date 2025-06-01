@@ -1,1 +1,45 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 @import "tailwindcss";
+
+@theme {
+    --color-primary: #274c77;
+    --color-primary-shade: #577399;
+    --color-secondary: #e7ecef;
+    --color-accent: #a3cef1;
+}
+
+.sidebar-list {
+    @apply px-[10px] flex justify-between border-b-2 border-accent cursor-pointer text-secondary hover:bg-primary-shade w-full text-center h-[65px] transition duration-100 ease-in-out;
+}
+
+.utility-list {
+  @apply bg-accent hover:bg-primary-shade flex-auto text-center cursor-pointer text-[1.1rem] leading-[40px] min-w-[50px] mx-[10px];
+}
+
+@theme {
+  --font-main: "Roboto", sans-serif; 
+}
+
+/* add the code bellow */ 
+@layer utilities {
+  .no-scrollbar{
+    overflow-y: overlay;
+    scrollbar-gutter: stable;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    position: absolute;
+    right: 0;
+    width: 10px;
+  }
+  .no-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,0.4);
+    border-radius: 10rem;
+    border: 1px solid #fff;
+  }
+  .no-scrollbar::-webkit-scrollbar-track-piece:start {
+    background: transparent;
+  }
+  .faq-body::-webkit-scrollbar-track-piece:end {
+    background: transparent;
+  }
+}
