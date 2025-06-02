@@ -6,15 +6,16 @@ import Table from "../components/Table.tsx";
 const categories: string[] = ["Mix", "Necklace", "Ring"];
 
 const data_headers: string[] = [
+  "",
   "ID",
   "Name",
+  "Color",
   "Weight",
   "Purity",
   "Stones",
-  "Date",
-  "Color",
+  "Date Sold",
 ];
-const data_items: string[][] = Array(100).fill(
+const data_items: string[][] = Array(120).fill(
   Array(data_headers.length).fill("dummy")
 );
 

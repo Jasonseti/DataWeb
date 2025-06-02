@@ -1,63 +1,115 @@
+import { UIEvent, useEffect, useState } from "react";
+
 const column_widths: string[] = [
+  "w-[40px]",
   "w-[10%]",
-  "w-[30%]",
+  "w-auto",
+  "w-[10%]",
   "w-[10%]",
   "w-[10%]",
   "w-[10%]",
   "w-[20%]",
-  "w-[10%]",
 ];
 
 function TableHeader({ data_headers }) {
   return (
-    <div className="flex flex-row w-full pr-[10px]">
-      {data_headers.map((head: string, i: number) => (
-        <div
-          className={
-            column_widths[i] + " h-[30px] leading-[30px] text-center outline-1"
-          }
-        >
-          {head}
-        </div>
-      ))}
-    </div>
+    <thead className="w-full">
+      <tr className="w-full h-[30px] leading-[30px] text-center">
+        {data_headers.map((head: string, i: number) => (
+          <th
+            className={
+              column_widths[i] +
+              " first:rounded-tl-[10px] last:rounded-tr-[10px] border-b-[1.8px] border-l-[1.8px] first:border-l-0 bg-accent"
+            }
+          >
+            {head}
+          </th>
+        ))}
+      </tr>
+    </thead>
   );
 }
 
 function TableItems({ data_items }) {
   return (
-    <div className="outline-1 h-[400px] no-scrollbar">
+    <tbody>
       {data_items.map((item: string[]) => (
         <TableRows item={item} />
       ))}
-    </div>
+    </tbody>
   );
 }
 
 function TableRows({ item }) {
   return (
-    <div className="flex flex-row outline-1">
+    <tr className="w-full h-[30px] leading-[30px]">
       {item.map((value: string, i: number) => (
-        <div
+        <td
           className={
             column_widths[i] +
-            " h-[30px] leading-[30px] " +
-            (i === 1 ? "pl-1" : "text-center") +
-            " outline-1"
+            " " +
+            (i === 2 || i === 7 ? "pl-[1vw]" : "text-center") +
+            " border-t-[1.8px] border-l-[1.8px] first:border-l-0"
           }
         >
-          {value}
-        </div>
+          {i === 0 ? (
+            <label className="inline-block w-full h-[30px]">
+              <input type="checkbox" className="scale-[120%]" />
+            </label>
+          ) : (
+            value
+          )}
+        </td>
       ))}
-    </div>
+    </tr>
   );
 }
 
 function Table({ data_headers, data_items }) {
+  const [is_visible, setVisible] = useState(false);
+  useEffect(() => {
+    let timer = setTimeout(() => setVisible(false), 2500);
+    return () => clearTimeout(timer);
+  }, [is_visible]);
+
+  const updateScrollbar = (e) => {
+    setVisible(true);
+    const { scrollTop, scrollHeight, clientHeight } = e.target;
+    const bar_height = (clientHeight / scrollHeight) * clientHeight;
+    const position =
+      (scrollTop / (scrollHeight - clientHeight)) * (clientHeight - bar_height);
+    document.getElementById("scrollbar")!.style.height = bar_height + 1 + "px";
+    document.getElementById("scrollbar")!.style.top = position + 1 + "px";
+  };
+
   return (
-    <div className="max-w-[1200px] m-auto px-[20px]">
-      <TableHeader data_headers={data_headers} />
-      <TableItems data_items={data_items} />
+    <div className="mb-[20px] shadow-[5px_10px_10px_5px_#00000024] max-w-[1100px] m-auto outline-[1.8px] rounded-t-[10px]">
+      <table className="w-full">
+        <TableHeader data_headers={data_headers} />
+      </table>
+      <div
+        onLoad={(e) => updateScrollbar(e)}
+        onScroll={(e) => updateScrollbar(e)}
+        className="h-[600px] overflow-auto no-scrollbar"
+      >
+        <table className="w-full">
+          <TableItems data_items={data_items} />
+        </table>
+      </div>
+      <div
+        className={
+          (!is_visible && "opacity-0 transition-[opacity] duration-500") +
+          " float-right relative bottom-[600px] -mb-[600px] inline-block bg-black/20 w-[16px] h-[600px]"
+        }
+      >
+        <div
+          id="scrollbar"
+          className={
+            (!is_visible && "opacity-0 transition-[opacity] duration-500") +
+            " relative left-[3px] top-[10px] w-[10px] rounded-[100px] bg-gray-500"
+          }
+        ></div>
+      </div>
     </div>
   );
 }
