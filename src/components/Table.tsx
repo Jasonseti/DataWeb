@@ -42,7 +42,7 @@ function TableItems({ data_items }) {
 
 function TableRows({ item }) {
   return (
-    <tr className="w-full h-[30px] leading-[30px]">
+    <tr className="w-full h-[30px] leading-[30px] table-decor">
       {item.map((value: string, i: number) => (
         <td
           className={
@@ -90,7 +90,7 @@ function Table({ data_headers, data_items }) {
       <div
         onLoad={(e) => updateScrollbar(e)}
         onScroll={(e) => updateScrollbar(e)}
-        className="h-[600px] overflow-auto no-scrollbar"
+        className="h-[700px] overflow-auto no-scrollbar"
       >
         <table className="w-full">
           <TableItems data_items={data_items} />
@@ -99,7 +99,7 @@ function Table({ data_headers, data_items }) {
       <div
         className={
           (!is_visible && "opacity-0 transition-[opacity] duration-500") +
-          " float-right relative bottom-[600px] -mb-[600px] inline-block bg-black/20 w-[16px] h-[600px]"
+          " float-right relative bottom-[700px] -mb-[700px] inline-block bg-black/20 w-[16px] h-[700px]"
         }
       >
         <div

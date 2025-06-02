@@ -1,7 +1,7 @@
 function TopBar() {
   return (
     <div className="w-full h-[70px] mb-[12px] px-[40px] bg-primary flex justify-between place-items-center-safe">
-      <div className="text-[4vw] lg:text-[40px] text-text-main font-main font-bold">
+      <div className="text-[4vw] lg:text-[40px] text-text-main font-main font-extrabold">
         MATAHARI JEWELRY
       </div>
 

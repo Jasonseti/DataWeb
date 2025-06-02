@@ -1,18 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,100..900;1,100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
 @import "tailwindcss";
 
 @theme {
-    --color-primary: #43567E;
-    --color-primary-shade: #577399;
-    --color-secondary: #FEFEFE;
-    --color-secondary-shade: #EDEDED;
-    --color-accent: #EDBC82;
-    --color-accent-shade: #DDDDDD;
-    --color-background: #FFFFFF;
+    --color-primary: #354b7e;
+    --color-primary-shade: #4f6f9f;
+    --color-accent: #eab26e;
+    --color-accent-shade: #dedede;
+    --color-background: #f8f8f8;
 }
+.color_picker {color: #ebdecd;}
 
 @theme {
-  --font-main: "Bitter";
+  --font-main: "Nunito";
   --font-secondary: "Noto Sans";
   --color-text-black: #020202;
   --color-text-white: #eeeeee;
@@ -21,5 +20,14 @@
 @layer utilities {
   .no-scrollbar::-webkit-scrollbar {
     display: none;
+  }
+  .table-decor {
+    font-family: "Nunito";
+  }
+  .table-decor:nth-child(even) {
+    background-color: #ffffff;
+  }
+  .table-decor:nth-child(odd) {
+    background-color: #dedede;
   }
 }

@@ -18,7 +18,7 @@ function SearchBar({ search_value, setSearch }) {
       <input
         type="text"
         placeholder="Search..."
-        className="shadow-[5px_10px_10px_5px_#00000024] font-secondary bg-secondary w-full h-full pl-[50px] border-[1.5px] border-black rounded-[8px] focus:outline-[1px]"
+        className="shadow-[5px_10px_10px_5px_#00000024] font-secondary bg-white w-full h-full pl-[50px] border-[1.5px] border-black rounded-[8px] focus:outline-[1px]"
         value={search_value}
         onChange={(e) => setSearch(e.target.value)}
       />

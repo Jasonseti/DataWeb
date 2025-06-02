@@ -61,9 +61,10 @@ function SideBar({ nav_titles, nav_links, nav_icons }) {
 
   return (
     <div
+      id="sidebar"
       className={
         (is_folded ? "w-[60px]" : "w-[calc(max(min(20%,220px),150px))]") +
-        " px-[5px] transition-[width] duration-500 ease h-[111vh] bg-primary rounded-r-[12px]"
+        " sticky top-[20px] px-[5px] transition-[width] duration-500 ease h-[800px] bg-primary rounded-r-[12px]"
       }
     >
       <ProfileMenu is_folded={is_folded} toggleFold={toggleFold} />
@@ -77,6 +78,10 @@ function SideBar({ nav_titles, nav_links, nav_icons }) {
           />
         ))}
       </ul>
+      {/* <script>
+        document.getElementById("sidebar")!.style.height =
+        document.body.clientHeight;
+      </script> */}
     </div>
   );
 }
