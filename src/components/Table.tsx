@@ -1,4 +1,4 @@
-import { UIEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const column_widths: string[] = [
   "w-[40px]",
