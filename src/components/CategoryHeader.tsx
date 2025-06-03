@@ -20,7 +20,7 @@ function CategoryTitle({ categories, selected_index, setSelected }) {
       <div className="h-[200px] w-full bg-[url(img/bg-clouds.webp)] bg-cover bg-center rounded-l-[12px]" />
       <div className="relative left-[20px] bottom-[55px] text-text-main font-secondary font-semibold text-[1.2rem] w-[40%] min-w-[150px]">
         <div
-          className="bg-secondary/90 rounded-md pl-[20px] py-[3px] cursor-pointer flex justify-between place-items-center-safe"
+          className="bg-white/90 bg rounded-md pl-[20px] py-[3px] cursor-pointer flex justify-between place-items-center-safe"
           onClick={toggleFolded}
         >
           {categories[selected_index]}
@@ -40,19 +40,20 @@ function CategoryTitle({ categories, selected_index, setSelected }) {
             height="30px"
             viewBox="0 -960 960 960"
             width="30px"
+            fill="white"
             className={
               (is_folded ? "hidden" : "") +
-              " absolute right-[0px] bottom-[94px] rotate-180 fill-secondary"
+              " absolute right-[0px] bottom-[94px] rotate-180"
             }
           >
             <path d="M480-360 280-560h400L480-360Z" />
           </svg>
-          <ul className="cursor-pointer bg-secondary rounded-md mt-[10px]">
+          <ul className="cursor-pointer rounded-md mt-[10px]">
             {categories.map((category: string, i: number) => (
               <li
                 className={
                   (is_folded ? "hidden" : "") +
-                  " relative z-50 pl-[20px] py-[3px] bg-secondary hover:bg-secondary-shade first:rounded-t-md last:rounded-b-md border-b-[1.5px] last:border-b-0"
+                  " relative z-50 pl-[20px] py-[3px] bg-white hover:bg-secondary-shade first:rounded-t-md last:rounded-b-md border-b-[1.5px] last:border-b-0"
                 }
                 onClick={() => {
                   setSelected(i);

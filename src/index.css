@@ -1,18 +1,21 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Tinos:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 @import "tailwindcss";
 
 @theme {
-    --color-primary: #354b7e;
-    --color-primary-shade: #4f6f9f;
-    --color-accent: #eab26e;
-    --color-accent-shade: #dedede;
-    --color-background: #f8f8f8;
+  --color-primary: #354b7e;
+  --color-primary-shade: #4f6f9f;
+  --color-accent: #eab26e;
+  --color-accent-shade: #dedede;
+  --color-background: #f8f8f8;
 }
-.color_picker {color: #ebdecd;}
+.color_picker {
+  color: #ebdecd;
+}
 
 @theme {
-  --font-main: "Nunito";
+  --font-main: "Georgia";
   --font-secondary: "Noto Sans";
+  --font-table: "Nunito Sans"
   --color-text-black: #020202;
   --color-text-white: #eeeeee;
 }
@@ -21,13 +24,106 @@
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
-  .table-decor {
-    font-family: "Nunito";
-  }
   .table-decor:nth-child(even) {
     background-color: #ffffff;
   }
   .table-decor:nth-child(odd) {
     background-color: #dedede;
   }
+}
+
+/* Login Page CSS */
+:root {
+  --main-color: rgb(90, 135, 22);
+  --shade-color: rgb(51, 75, 18);
+  --accent-color: rgb(230, 230, 230);
+  --error-color: rgb(224, 24, 24);
+}
+body {
+  @apply bg-[url("src/bamboo\_bg.webp")] bg-cover bg-right;
+}
+.form_container {
+  @apply w-[min(max(40%,400px),600px)] h-screen bg-[rgba(240,248,255,0.95)] backdrop-blur-sm text-center flex flex-col items-center justify-center pb-[10vh] rounded-[0_20px_20px_0];
+  font-family: "Segoe UI", sans-serif;
+}
+.form_container h1 {
+  @apply text-[2.4rem] font-extrabold;
+}
+.form_container form {
+  @apply w-[min(500px,100%)] flex flex-col items-center mt-5 mb-10;
+}
+form > .input_container {
+  @apply w-[calc(70%)] flex justify-center mx-0 my-1.5 rounded-[5px] border-[1.5px] border-solid border-[black];
+}
+form > .input_container:hover {
+  outline: 0.5px solid black;
+}
+form > .input_container:has(input:focus) {
+  outline: 0.5px solid black;
+}
+form > .input_container label {
+  @apply transition-[0.1s] duration-[ease] shrink-0 h-10 w-[42px] bg-[color:var(--main-color)] flex items-center justify-center;
+}
+form > .input_container svg {
+  @apply fill-[whitesmoke];
+}
+form > .input_container input {
+  @apply w-full bg-[color:var(--accent-color)] pl-4 border-[none];
+}
+form > .input_container input:focus {
+  outline: none;
+}
+form > .input_container:has(input:focus) > label {
+  @apply bg-[color:var(--shade-color)];
+}
+form .show_toggle {
+  @apply cursor-pointer bg-[color:var(--accent-color)] h-10 w-10 flex items-center justify-center pr-2;
+}
+form .show_toggle svg {
+  @apply h-5 w-5 fill-[gray] transition-[0.1s] duration-[ease];
+}
+form .show_toggle:hover > svg,
+form .show_toggle:active > svg {
+  @apply fill-[rgb(80,80,80)];
+}
+form .show_toggle .show {
+  @apply inline-block;
+}
+form .show_toggle .hide {
+  @apply hidden;
+}
+form .wall {
+  @apply mt-5;
+}
+form .remember {
+  @apply w-[70%] flex flex-row items-center border-[none];
+  justify-content: start;
+}
+form .remember input {
+  @apply h-4 w-4 mx-[7px] my-0;
+}
+form .remember label {
+  @apply h-[18px] leading-[18px] text-sm;
+  vertical-align: auto;
+}
+form button {
+  @apply cursor-pointer w-[70%] text-base bg-[color:var(--main-color)] text-[aliceblue] font-semibold text-[1.25em] transition-[0.1s] duration-[ease] mt-[7px] rounded-[15px] border-[none];
+  padding: 8px 0 calc(10px + 0.1em) 0;
+  font-family: inherit;
+}
+form button:hover,
+form button:active {
+  @apply bg-[color:var(--shade-color)];
+}
+.form_container a {
+  @apply no-underline hover:underline;
+}
+form .incorrect {
+  @apply border-[color:var(--error-color)];
+}
+form .incorrect label {
+  @apply bg-[color:var(--error-color)];
+}
+form #error_message {
+  @apply text-[color:var(--error-color)] text-sm mb-2.5 mx-[10%] my-0;
 }

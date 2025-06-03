@@ -42,7 +42,7 @@ function TableItems({ data_items }) {
 
 function TableRows({ item }) {
   return (
-    <tr className="w-full h-[30px] leading-[30px] table-decor">
+    <tr className="w-full h-[30px] leading-[30px] font-table table-decor">
       {item.map((value: string, i: number) => (
         <td
           className={
