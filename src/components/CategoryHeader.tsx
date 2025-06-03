@@ -17,7 +17,7 @@ function CategoryTitle({ categories, selected_index, setSelected }) {
 
   return (
     <div className="w-[55%]">
-      <div className="h-[200px] w-full bg-[url(img/bg-clouds.webp)] bg-cover bg-center rounded-l-[12px]" />
+      <div className="h-[200px] w-full bg-[url(images/bg-clouds.webp)] bg-cover bg-center rounded-l-[12px]" />
       <div className="relative left-[20px] bottom-[55px] text-text-main font-secondary font-semibold text-[1.2rem] w-[40%] min-w-[150px]">
         <div
           className="bg-white/90 bg rounded-md pl-[20px] py-[3px] cursor-pointer flex justify-between place-items-center-safe"

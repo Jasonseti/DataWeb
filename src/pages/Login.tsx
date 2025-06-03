@@ -91,7 +91,7 @@ function Login() {
           Don't have an Account? <a href="">Sign Up</a>
         </p>
       </div>
-      <div className="h-screen flex-auto lg:bg-[url(img/bg-clouds.webp)] bg-[url(img/bg-forest.jpg)] bg-cover bg-center"></div>
+      <div className="h-screen flex-auto lg:bg-[url(images/bg-clouds.webp)] bg-[url(images/bg-forest.jpg)] bg-cover bg-center"></div>
     </div>
   );
 }

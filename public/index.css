@@ -539,10 +539,10 @@
     }
   }
   .bg-\[url\(img\/bg-clouds\.webp\)\] {
-    background-image: url(img/bg-clouds.webp);
+    background-image: url(images/bg-clouds.webp);
   }
   .bg-\[url\(img\/bg-forest\.jpg\)\] {
-    background-image: url(img/bg-forest.jpg);
+    background-image: url(images/bg-forest.jpg);
   }
   .bg-cover {
     background-size: cover;
@@ -852,7 +852,7 @@
   }
   .lg\:bg-\[url\(img\/bg-clouds\.webp\)\] {
     @media (width >= 64rem) {
-      background-image: url(img/bg-clouds.webp);
+      background-image: url(images/bg-clouds.webp);
     }
   }
   .lg\:text-\[13px\] {

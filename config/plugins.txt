@@ -1,3 +1,11 @@
 HTML: React
 CSS: PostCSS, Tailwind
-JS: ESLint, Typescript
+JS: ESLint-g, Typescript
+
+Server-side: NodeJS-g, Python
+API: Express
+Authorization: Firebase
+Database: MongoDB, Snappy
+
+Testing: Jest
+Launching: Webpack, Docker
