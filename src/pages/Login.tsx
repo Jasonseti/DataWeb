@@ -13,6 +13,7 @@ function LoginPage() {
       username: username,
       password: password,
     };
+    // !IMPORTANT: Make sure forms don't reload page when submitting
     axios
       .post("/sessions", document)
       .then((result) => result.data)

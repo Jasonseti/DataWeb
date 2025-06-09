@@ -92,11 +92,9 @@ function FormHeader({ title, closeModal }) {
 function ModalAdd({ is_open, closeModal, update }) {
   const [state, setState] = useState<string[]>(["", "Gold", "", "", ""]);
   const resetState = () => setState(["", "Gold", "", "", ""]);
-  const postData = async () => {
+  const postData = () => {
     const fetchID = async () => {
-      return axios.get("/api/items/id").then((results) => {
-        return results.data.ID;
-      });
+      return axios.get("/api/items/id").then((results) => results.data.ID);
     };
     fetchID()
       .then((nextID: number) => {
@@ -111,7 +109,8 @@ function ModalAdd({ is_open, closeModal, update }) {
         };
         return document;
       })
-      .then((document) => axios.post("/api/items", document));
+      .then((document) => axios.post("/api/items", document))
+      .then(() => update());
   };
   return (
     <Modal
@@ -178,7 +177,12 @@ function ModalAdd({ is_open, closeModal, update }) {
         />
         <input
           type="submit"
-          onClick={() => postData()}
+          onClick={(e) => {
+            e.preventDefault();
+            postData();
+            closeModal();
+            resetState();
+          }}
           className="cursor-pointer rounded-[5px] bg-accent p-[7.5px] my-[5px]"
         />
       </form>
@@ -279,7 +283,11 @@ function ModalEdit({ is_open, closeModal, data_items, checked, update }) {
         />
         <input
           type="submit"
-          onClick={() => updateData()}
+          onClick={(e) => {
+            e.preventDefault();
+            updateData();
+            closeModal();
+          }}
           className="cursor-pointer rounded-[5px] bg-accent p-[7.5px] my-[5px]"
         />
       </form>
@@ -300,11 +308,11 @@ function ModalDelete({ is_open, closeModal, data_items, checked, update }) {
     let ids = Array.from(Array(checked.length).keys())
       .filter((i) => checked[i] === true)
       .map((i) => data_items[i][0]);
-    for (let id of ids) {
+    for await (let id of ids) {
       let url = "/api/items/" + id;
       axios.delete(url);
     }
-    await update();
+    update();
   };
 
   const Button = ({ value, bg, onClick }) => (
@@ -326,7 +334,14 @@ function ModalDelete({ is_open, closeModal, data_items, checked, update }) {
       <div>
         <h2 className="font-main font-bold text-[25px] text-center">{`Are you sure you want to delete?`}</h2>
         <div className="flex justify-around mt-[20px]">
-          <Button value={"Delete"} bg={"bg-red-400"} onClick={deleteData} />
+          <Button
+            value={"Delete"}
+            bg={"bg-red-400"}
+            onClick={() => {
+              deleteData();
+              closeModal();
+            }}
+          />
           <Button value={"Cancel"} bg={"bg-gray-400"} onClick={closeModal} />
         </div>
       </div>
