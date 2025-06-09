@@ -70,7 +70,12 @@ function CategoryTitle({ categories, selected_index, setSelected }) {
   );
 }
 
-function CategoryHeader({ categories, selected_index, setSelected }) {
+function CategoryHeader({
+  categories,
+  selected_index,
+  setSelected,
+  is_updated,
+}) {
   return (
     <div className="shadow-[10px_20px_20px_10px_#00000040] rounded-[12px] m-auto max-w-[1000px] h-[200px] flex">
       <CategoryTitle

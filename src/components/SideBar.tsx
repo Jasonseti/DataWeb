@@ -73,7 +73,7 @@ function SidebarList({ title, link, icon, is_folded }) {
   );
 }
 function SideBar({ nav_titles, nav_links, nav_icons }) {
-  const [is_folded, setFolded] = useState<boolean>(false);
+  const [is_folded, setFolded] = useState<boolean>(true);
   const toggleFold = () => setFolded(!is_folded);
 
   return (

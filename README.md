@@ -11,4 +11,8 @@ Timeline:
 31-05 / Set up ESLint and design web layout
 01-06 / Create website basic Layout
 02-06 / Stylize website + add scroll feature
-03-06 / Add modal form + button functionality + cookie
+03-06 / Set up MongoDB + Express API
+04-06 / Set up APIs + add .vscode tasks
+07-06 / Set up Get and Modal Form
+08-06 / Set up Post, Put, and Delete + Login Authentication
+09-06 / Re-learning Tensorflow and Python

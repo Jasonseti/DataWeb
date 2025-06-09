@@ -1,3 +1,6 @@
+import { ModalAdd, ModalEdit, ModalDelete } from "./ModalForms.tsx";
+import { useState } from "react";
+
 function SearchBar({ search_value, setSearch }) {
   return (
     <div
@@ -26,15 +29,14 @@ function SearchBar({ search_value, setSearch }) {
   );
 }
 
-function AERBar({ titles, icons }) {
+function FunctionBar({ title, icon, func }) {
   return (
-    <div className="shadow-[3px_6px_6px_3px_#00000024] rounded-[10px] cursor-pointer flex flex-row justify-center">
-      {titles.map((title: string, i: number) => (
-        <div className="px-[1vw] sm:flex h-full bg-accent hover:bg-accent-shade transition duration-75 ease border-l-[1.5px] first:border-l-0 first:rounded-l-[10px] last:rounded-r-[10px] place-items-center">
-          <div className="mr-[2px] fill-text-black">{icons[i]}</div>
-          <p className="font-secondary text-text-black">{title}</p>
-        </div>
-      ))}
+    <div
+      onClick={func}
+      className="px-[1vw] sm:flex h-full bg-accent hover:bg-accent-shade active:bg-gray-500 transition duration-75 ease border-l-[1.5px] first:border-l-0 first:rounded-l-[10px] last:rounded-r-[10px] place-items-center"
+    >
+      <div className="mr-[2px] fill-text-black">{icon}</div>
+      <p className="font-secondary text-text-black">{title}</p>
     </div>
   );
 }
@@ -64,14 +66,7 @@ const icons = [
   >
     <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" />
   </svg>,
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    height="24px"
-    viewBox="0 -960 960 960"
-    width="24px"
-  >
-    <path d="M280-160 80-360l200-200 56 57-103 103h287v80H233l103 103-56 57Zm400-240-56-57 103-103H440v-80h287L624-743l56-57 200 200-200 200Z" />
-  </svg>,
+
   <svg
     xmlns="http://www.w3.org/2000/svg"
     height="24px"
@@ -89,18 +84,80 @@ const icons = [
     <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q8 0 15 1.5t14 4.5l-74 74H200v560h560v-266l80-80v346q0 33-23.5 56.5T760-120H200Zm261-160L235-506l56-56 170 170 367-367 57 55-424 424Z" />
   </svg>,
 ];
-function UtilityBar({ search_value, setSearch }) {
+function useToggle(value: boolean) {
+  const [state, setState] = useState(value);
+  const toggleState = () => setState(!state);
+  return [state, toggleState];
+}
+function UtilityBar({
+  data_items,
+  checked,
+  setChecked,
+  search_value,
+  setSearch,
+  update,
+}) {
+  const [is_openAdd, toggleModalAdd] = useToggle(false);
+  const [is_openEdit, toggleModalEdit] = useToggle(false);
+  const [is_openDelete, toggleModalDelete] = useToggle(false);
+
   return (
     <div className="mb-[67px] lg:mb-[17px] mt-[30px]">
       <div className="h-[40px] lg:flex lg:flex-row max-w-[1000px] m-auto">
         <SearchBar search_value={search_value} setSearch={setSearch} />
         <div className="my-[15px] lg:my-[2.5px] h-[48px] sm:h-[35px] lg:flex-auto flex justify-evenly">
-          <AERBar titles={["Reload"]} icons={icons.slice(0, 1)} />
-          <AERBar
-            titles={["Add", "Edit", "Replace"]}
-            icons={icons.slice(1, 4)}
-          />
-          <AERBar titles={["Delete", "Select All"]} icons={icons.slice(4, 6)} />
+          <div className="bar-group">
+            <FunctionBar
+              title={"Reload"}
+              icon={icons[0]}
+              func={() => update()}
+            />
+          </div>
+          <div className="bar-group">
+            <ModalAdd
+              is_open={is_openAdd}
+              closeModal={toggleModalAdd}
+              update={update}
+            />
+            <FunctionBar title={"Add"} icon={icons[1]} func={toggleModalAdd} />
+            <ModalEdit
+              is_open={is_openEdit}
+              closeModal={toggleModalEdit}
+              data_items={data_items}
+              checked={checked}
+              update={update}
+            />
+            <FunctionBar
+              title={"Edit"}
+              icon={icons[2]}
+              func={toggleModalEdit}
+            />
+          </div>
+          <div className="bar-group">
+            <ModalDelete
+              is_open={is_openDelete}
+              closeModal={toggleModalDelete}
+              data_items={data_items}
+              checked={checked}
+              update={update}
+            />
+            <FunctionBar
+              title={"Delete"}
+              icon={icons[3]}
+              func={toggleModalDelete}
+            />
+            <FunctionBar
+              title={"Select All"}
+              icon={icons[4]}
+              func={() => {
+                if (checked.indexOf(false) === -1) {
+                  setChecked(Array(checked.length).fill(false));
+                } else {
+                  setChecked(Array(checked.length).fill(true));
+                }
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>
