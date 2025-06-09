@@ -156,9 +156,7 @@ function Table({
       setChecked(Array(checked.length).fill(false));
       const fetchData = async () => {
         let url = "/api/items?search=" + search_value;
-        return await axios.get(url).then((results) => {
-          return results.data;
-        });
+        return await axios.get(url).then((results) => results.data);
       };
 
       fetchData().then((results) => {

@@ -1,12 +1,32 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import axios from "axios";
+// import { jwtDecode } from "jwt-decode";
 
-function Login() {
+function LoginPage() {
+  const navigate = useNavigate();
+  const [username, setUsername] = useState("Jason Seti");
+  const [password, setPassword] = useState("pass");
+  const [error_message, setError] = useState("");
+  const login = () => {
+    let document = {
+      username: username,
+      password: password,
+    };
+    axios
+      .post("/sessions", document)
+      .then((result) => result.data)
+      .then(({ is_login, token }) =>
+        is_login ? navigate("/") : setError("Wrong Username or Password.")
+      );
+  };
+
   return (
     <div className="flex">
       <div className="form_container">
         <h1>Log In</h1>
         <form>
-          <p id="error_message" />
+          <p id="error_message">{error_message}</p>
           <div className="input_container">
             <label htmlFor="name">
               <svg
@@ -23,7 +43,9 @@ function Login() {
               type="text"
               name="name"
               id="name"
-              placeholder="Firstname"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Username"
               required
             />
           </div>
@@ -44,6 +66,8 @@ function Login() {
               name="psw"
               id="psw"
               autoComplete="new-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
               required
             />
@@ -80,20 +104,26 @@ function Login() {
             />
             <label htmlFor="show_psw">Remember Me</label>
           </div>
-          <Link className="w-full" to="/">
-            <button type="submit">Log In</button>
-          </Link>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              login();
+            }}
+            type="submit"
+          >
+            Log In
+          </button>
         </form>
-        <p>
+        {/* <p>
           Forgot <a href="">Username/Password?</a>
         </p>
         <p>
           Don't have an Account? <a href="">Sign Up</a>
-        </p>
+        </p> */}
       </div>
       <div className="h-screen flex-auto lg:bg-[url(images/bg-clouds.webp)] bg-[url(images/bg-forest.jpg)] bg-cover bg-center"></div>
     </div>
   );
 }
 
-export default Login;
+export default LoginPage;

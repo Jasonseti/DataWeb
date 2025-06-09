@@ -3,8 +3,8 @@ CSS: PostCSS, Tailwind
 JS: ESLint-g, Typescript
 
 Server-side: NodeJS-g, Python
-API: Express, Cors, Axios, Postman
-Authorization: Firebase or JWT
+API: Express, Cors, Axios, Thunder Client
+Authorization: JWT
 Database: MongoDB, Snappy
 
 Testing: Jest

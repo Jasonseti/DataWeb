@@ -44,6 +44,20 @@ function find(query, options, sort = {}, limit = 100) {
   });
 }
 
+function authenticate(query) {
+  return new Promise((resolve, reject) => {
+    let response;
+    try {
+      const db = client.db("Items");
+      const collection = db.collection("users");
+
+      response = collection.findOne(query);
+    } finally {
+      resolve(response);
+    }
+  });
+}
+
 function insert(document) {
   return new Promise((resolve, reject) => {
     try {
@@ -85,6 +99,7 @@ function remove(query) {
 
 const MongoDB = {
   ping: ping,
+  authenticate: authenticate,
   find: find,
   insert: insert,
   update: update,
