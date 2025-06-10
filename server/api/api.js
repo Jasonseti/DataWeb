@@ -42,7 +42,18 @@ router.delete("/sessions/:token", (request, response) => {
   response.sendStatus(204);
 });
 
-// Items API
+// Category API
+router.get("/api/statistics/", (request, response) => {
+  MongoDB.count()
+    .then((results) => results.toArray())
+    .then((data) => {
+      console.log("Statistics retrieved.");
+      response.status(200);
+      response.send(data);
+    });
+});
+
+// Table API
 router.get("/api/items/id", (request, response) => {
   MongoDB.find({}, { projection: { _id: 0, ID: 1 } }, { ID: -1 }, 1)
     .then((results) => results.toArray())
@@ -52,9 +63,14 @@ router.get("/api/items/id", (request, response) => {
     });
 });
 router.get("/api/items", (request, response) => {
-  const { search, sort, ascending } = request.query;
-  console.log(request.query);
+  const { search, hide_sold, sort, ascending, category } = request.query;
   let query = { name: new RegExp(search, "i") };
+  if (category !== "mix") {
+    query.category = category;
+  }
+  if (hide_sold === "true") {
+    query.date_sold = null;
+  }
   let options = {
     projection: {
       _id: 0,

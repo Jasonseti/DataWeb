@@ -1,5 +1,5 @@
 import { ModalAdd, ModalEdit, ModalDelete } from "./ModalForms.tsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function SearchBar({ search_value, setSearch }) {
   return (
@@ -29,18 +29,39 @@ function SearchBar({ search_value, setSearch }) {
   );
 }
 
-function FunctionBar({ title, icon, func }) {
+function FunctionBar({ title, icon, func, tooltip = <></> }) {
   return (
     <div
       onClick={func}
-      className="px-[1vw] sm:flex h-full bg-accent hover:bg-accent-shade active:bg-gray-500 transition duration-75 ease border-l-[1.5px] first:border-l-0 first:rounded-l-[10px] last:rounded-r-[10px] place-items-center"
+      className="z-0 px-[1vw] sm:flex h-full bg-accent hover:bg-accent-shade active:bg-gray-500 transition duration-75 ease border-l-[1.5px] first:border-l-0 first:rounded-l-[10px] last:rounded-r-[10px] place-items-center"
     >
+      {tooltip}
       <div className="mr-[2px] fill-text-black">{icon}</div>
       <p className="font-secondary text-text-black">{title}</p>
     </div>
   );
 }
 
+function Tooltip({ banner, is_tooltip, setTooltip }) {
+  useEffect(() => {
+    let timer = setTimeout(() => setTooltip(false), 2000);
+    return () => clearTimeout(timer);
+  }, [is_tooltip, setTooltip]);
+  return (
+    <div className="absolute">
+      <p
+        className={
+          (is_tooltip
+            ? "bottom-[40px] duration-250"
+            : "duration-500 bottom-[0px] opacity-0") +
+          " transition-all rounded-[5px] bg-red-400 p-1 relative right-[55px]"
+        }
+      >
+        {banner}
+      </p>
+    </div>
+  );
+}
 const icons = [
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -87,9 +108,11 @@ const icons = [
 function useToggle(value: boolean) {
   const [state, setState] = useState(value);
   const toggleState = () => setState(!state);
-  return [state, toggleState];
+  return [state, toggleState] as const;
 }
 function UtilityBar({
+  categories,
+  selected_category,
   data_items,
   checked,
   setChecked,
@@ -100,7 +123,9 @@ function UtilityBar({
   const [is_openAdd, toggleModalAdd] = useToggle(false);
   const [is_openEdit, toggleModalEdit] = useToggle(false);
   const [is_openDelete, toggleModalDelete] = useToggle(false);
-
+  const [is_tooltipEdit, setTooltipEdit] = useState(false);
+  const [is_tooltipDelete, setTooltipDelete] = useState(false);
+  const checkCheck = () => checked.indexOf(true) !== -1;
   return (
     <div className="mb-[55px] lg:mb-[17px] mt-[30px]">
       <div className="h-[40px] lg:flex lg:flex-row max-w-[1000px] m-auto">
@@ -117,6 +142,8 @@ function UtilityBar({
             <ModalAdd
               is_open={is_openAdd}
               closeModal={toggleModalAdd}
+              categories={categories}
+              selected_category={selected_category}
               update={update}
             />
             <FunctionBar title={"Add"} icon={icons[1]} func={toggleModalAdd} />
@@ -124,13 +151,24 @@ function UtilityBar({
               is_open={is_openEdit}
               closeModal={toggleModalEdit}
               data_items={data_items}
+              categories={categories}
+              selected_category={selected_category}
               checked={checked}
               update={update}
             />
             <FunctionBar
               title={"Edit"}
               icon={icons[2]}
-              func={toggleModalEdit}
+              func={() =>
+                checkCheck() ? toggleModalEdit() : setTooltipEdit(true)
+              }
+              tooltip={
+                <Tooltip
+                  banner={"Select 1 document."}
+                  is_tooltip={is_tooltipEdit}
+                  setTooltip={setTooltipEdit}
+                />
+              }
             />
           </div>
           <div className="bar-group">
@@ -144,17 +182,24 @@ function UtilityBar({
             <FunctionBar
               title={"Delete"}
               icon={icons[3]}
-              func={toggleModalDelete}
+              func={() =>
+                checkCheck() ? toggleModalDelete() : setTooltipDelete(true)
+              }
+              tooltip={
+                <Tooltip
+                  banner={"Select at least 1 document."}
+                  is_tooltip={is_tooltipDelete}
+                  setTooltip={setTooltipDelete}
+                />
+              }
             />
             <FunctionBar
               title={"Select All"}
               icon={icons[4]}
               func={() => {
-                if (checked.indexOf(false) === -1) {
-                  setChecked(Array(checked.length).fill(false));
-                } else {
-                  setChecked(Array(checked.length).fill(true));
-                }
+                checkCheck()
+                  ? setChecked(Array(checked.length).fill(false))
+                  : setChecked(Array(checked.length).fill(true));
               }}
             />
           </div>

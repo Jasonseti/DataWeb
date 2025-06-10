@@ -20,7 +20,7 @@ function ProfileMenu({ is_folded, toggleFold }) {
             className="fill-accent transition-all duration-100 box-content p-[3px] m-auto rounded-md scale-150"
           >
             <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z" />
-          </svg>{" "}
+          </svg>
         </div>
       </div>
       <div className="px-[5px] mr-[10px] h-[60px] flex justify-around place-items-center border-1 bg-background/90 rounded-r-2xl">
@@ -41,8 +41,8 @@ function ProfileMenu({ is_folded, toggleFold }) {
             " pl-[5px] transition-all duration-250 text-[1.25vw] lg:text-[13px] font-secondary font-medium"
           }
         >
-          <p>User: JasonSeti</p>
-          <p>Valid until: 07-03-2026</p>
+          <p>User: Jason Seti</p>
+          <p>Valid until: {new Date().toUTCString().slice(0, 25)}</p>
         </div>
       </div>
     </div>

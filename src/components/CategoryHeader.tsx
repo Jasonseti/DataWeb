@@ -1,17 +1,42 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
-function CategoryStatistics({ selected_index }) {
+function CategoryStatistics({ categories, selected_category }) {
+  const [statistics, setStatistics] = useState<string[][]>([[]]);
+  useEffect(() => {
+    axios
+      .get("/api/statistics")
+      .then((results) => results.data)
+      .then((results) => {
+        results = results.map((result: string[][]) =>
+          Object.values(result)
+            .slice(1)
+            .toString()
+            .split(",")
+            .map((value) => Number(value))
+        );
+        results = [
+          results.reduce((a, b) => a.map((_, i) => a[i] + b[i])),
+          ...results,
+        ];
+        setStatistics(results);
+      });
+  }, [categories]);
+
   return (
     <div className="font-main font-semibold text-[1.2rem] text-text-white border-[2px] border-l-0 border-primary rounded-r-[12px] flex-auto px-[3%] py-[20px] bg-primary">
-      <p>Quantity: 856</p>
-      <p>In Stock: 704</p>
-      <p>Sold: 152</p>
-      <p>Total Gold: 3829.33 g</p>
+      <p>
+        In Stock:{" "}
+        {Number(statistics[selected_category][0]) -
+          Number(statistics[selected_category][2])}
+      </p>
+      <p>Sold: {statistics[selected_category][2]}</p>
+      <p>Total Gold: {statistics[selected_category][1]} grams</p>
     </div>
   );
 }
 
-function CategoryTitle({ categories, selected_index, setSelected }) {
+function CategoryTitle({ categories, selected_category, setCategory, update }) {
   const [is_folded, setFolded] = useState<boolean>(true);
   const toggleFolded = () => setFolded(!is_folded);
 
@@ -23,7 +48,7 @@ function CategoryTitle({ categories, selected_index, setSelected }) {
           className="bg-white/90 bg rounded-md pl-[20px] py-[3px] cursor-pointer flex justify-between place-items-center-safe"
           onClick={toggleFolded}
         >
-          {categories[selected_index]}
+          {categories[selected_category]}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="30px"
@@ -56,7 +81,7 @@ function CategoryTitle({ categories, selected_index, setSelected }) {
                   " relative z-50 pl-[20px] py-[3px] bg-white hover:bg-secondary-shade first:rounded-t-md last:rounded-b-md border-b-[1.5px] last:border-b-0"
                 }
                 onClick={() => {
-                  setSelected(i);
+                  setCategory(i);
                   toggleFolded();
                 }}
               >
@@ -72,18 +97,22 @@ function CategoryTitle({ categories, selected_index, setSelected }) {
 
 function CategoryHeader({
   categories,
-  selected_index,
-  setSelected,
-  is_updated,
+  selected_category,
+  setCategory,
+  update,
 }) {
   return (
     <div className="shadow-[10px_20px_20px_10px_#00000040] rounded-[12px] m-auto max-w-[1000px] h-[200px] flex">
       <CategoryTitle
         categories={categories}
-        selected_index={selected_index}
-        setSelected={setSelected}
+        selected_category={selected_category}
+        setCategory={setCategory}
+        update={update}
       />
-      <CategoryStatistics selected_index={selected_index} />
+      <CategoryStatistics
+        categories={categories}
+        selected_category={selected_category}
+      />
     </div>
   );
 }

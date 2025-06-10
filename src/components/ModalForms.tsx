@@ -37,7 +37,7 @@ function InputText({ name, index, state, setState, placeholder }) {
 
 function InputSelect({ name, index, state, setState, selections }) {
   return (
-    <label className="w-auto" htmlFor={name}>
+    <label className="flex-auto" htmlFor={name}>
       <select
         name={name}
         id={name}
@@ -89,9 +89,23 @@ function FormHeader({ title, closeModal }) {
   );
 }
 
-function ModalAdd({ is_open, closeModal, update }) {
-  const [state, setState] = useState<string[]>(["", "Gold", "", "", ""]);
-  const resetState = () => setState(["", "Gold", "", "", ""]);
+function ModalAdd({
+  is_open,
+  closeModal,
+  categories,
+  selected_category,
+  update,
+}) {
+  const initial_state = [
+    "",
+    "Gold",
+    "",
+    "",
+    "",
+    selected_category ? categories[selected_category] : "",
+  ];
+  const [state, setState] = useState<string[]>(initial_state);
+  const resetState = () => setState(initial_state);
   const postData = () => {
     const fetchID = async () => {
       return axios.get("/api/items/id").then((results) => results.data.ID);
@@ -106,6 +120,9 @@ function ModalAdd({ is_open, closeModal, update }) {
           purity: Number(state[3]),
           stones: state[4].toLowerCase(),
           date_sold: null,
+          category: selected_category
+            ? categories[selected_category].toLowerCase()
+            : null,
         };
         return document;
       })
@@ -122,6 +139,20 @@ function ModalAdd({ is_open, closeModal, update }) {
       <FormHeader title={"Add Item"} closeModal={closeModal} />
       {/* Add Form */}
       <form className="w-[220px] mt-2 flex flex-col">
+        {selected_category === 0 && (
+          <div className="flex justify-between">
+            <div className="m-auto text-center text-[18px] w-[90px]">
+              Category:
+            </div>
+            <InputSelect
+              name="category"
+              index={5}
+              state={state}
+              setState={setState}
+              selections={categories}
+            />
+          </div>
+        )}
         <InputText
           name={"name"}
           index={0}
@@ -159,13 +190,18 @@ function ModalAdd({ is_open, closeModal, update }) {
           />
           <div className="text-center m-auto text-[18px] w-[100px]">%</div>
         </div>
-        <InputText
-          name={"stones"}
-          index={4}
-          state={state}
-          setState={setState}
-          placeholder={"Stones . . ."}
-        />
+        <div className="flex justify-between">
+          <div className="m-auto text-center text-[18px] w-[100px]">
+            Stones:{" "}
+          </div>
+          <InputText
+            name={"stones"}
+            index={4}
+            state={state}
+            setState={setState}
+            placeholder={"Stones . . ."}
+          />
+        </div>
         <input
           type="submit"
           value="Reset"
@@ -190,17 +226,22 @@ function ModalAdd({ is_open, closeModal, update }) {
   );
 }
 
-function ModalEdit({ is_open, closeModal, data_items, checked, update }) {
-  const [state, setState] = useState<string[]>(["", "", "", "", "", ""]);
+function ModalEdit({
+  is_open,
+  closeModal,
+  data_items,
+  categories,
+  selected_category,
+  checked,
+  update,
+}) {
+  const [state, setState] = useState<string[]>(["", "", "", "", "", "", ""]);
   useEffect(() => {
-    if (is_open) {
-      if (checked.indexOf(true) !== -1) {
-        let new_state = data_items[checked.indexOf(true)].slice(1);
-        new_state[5] = new_state[5].slice(0, 10);
-        setState(new_state);
-      } else {
-        closeModal();
-      }
+    if (checked.indexOf(true) !== -1) {
+      let new_state = data_items[checked.indexOf(true)].slice(1);
+      new_state[5] = new_state[5].slice(0, 10);
+      new_state[6] = categories[selected_category];
+      setState(new_state);
     }
   }, [is_open]);
   const updateData = async () => {
@@ -212,6 +253,7 @@ function ModalEdit({ is_open, closeModal, data_items, checked, update }) {
       purity: Number(state[3]),
       stones: state[4].toLowerCase(),
       date_sold: new Date(state[5]),
+      category: state[6].toLowerCase(),
     };
     axios.put("/api/items", document).then(() => update());
   };
@@ -225,6 +267,20 @@ function ModalEdit({ is_open, closeModal, data_items, checked, update }) {
       <FormHeader title={"Edit Item"} closeModal={closeModal} />
       {/* Edit Form */}
       <form className="w-[220px] mt-2 flex flex-col">
+        {selected_category === 0 && (
+          <div className="flex justify-between">
+            <div className="m-auto text-center text-[18px] w-[90px]">
+              Category:
+            </div>
+            <InputSelect
+              name="category"
+              index={6}
+              state={state}
+              setState={setState}
+              selections={categories}
+            />
+          </div>
+        )}
         <InputText
           name={"name"}
           index={0}
@@ -296,14 +352,6 @@ function ModalEdit({ is_open, closeModal, data_items, checked, update }) {
 }
 
 function ModalDelete({ is_open, closeModal, data_items, checked, update }) {
-  // useEffect(() => {
-  //   if (is_open) {
-  //     if (checked.indexOf(true) !== -1) {
-  //     } else {
-  //       closeModal();
-  //     }
-  //   }
-  // }, [is_open]);
   const deleteData = async () => {
     let ids = Array.from(Array(checked.length).keys())
       .filter((i) => checked[i] === true)

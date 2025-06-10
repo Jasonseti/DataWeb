@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 // import { jwtDecode } from "jwt-decode";
 
@@ -18,8 +18,14 @@ function LoginPage() {
       .post("/sessions", document)
       .then((result) => result.data)
       .then(({ is_login, token }) =>
-        is_login ? navigate("/") : setError("Wrong Username or Password.")
+        is_login ? loginSuccess() : setError("Wrong Username or Password.")
       );
+  };
+  const loginSuccess = () => {
+    // let exp = new Date();
+    // exp.setTime(exp.getTime() + 7 * 24 * 60 * 60 * 1000);
+    // document.cookie = `username=${username}; expires=${exp.toUTCString()}; path=/`;
+    navigate("/");
   };
 
   return (

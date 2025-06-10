@@ -7,7 +7,7 @@ function Home() {
         <div className="mr-2 h-full w-[65%]">
           <div className="mb-[10px] border-2 h-[230px] w-full rounded-[20px]">
             <h1 className="font-main font-bold lg:text-[2.5rem] text-[2rem] my-[20px] mx-[2vw]">
-              {/* Welcome Back, {document.cookie.User} */}
+              Welcome Back, {"Jason Seti"}
             </h1>
           </div>
           <div className="mb-[10px] h-[160px] w-full flex">

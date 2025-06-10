@@ -1,6 +1,4 @@
 import { Suspense, useEffect, useState } from "react";
-import axios from "axios";
-import { DeviceRequestPromptDevice } from "puppeteer/lib/cjs/puppeteer/puppeteer.js";
 
 const column_widths: string[] = [
   "w-[40px]",
@@ -111,7 +109,12 @@ function TableItems({ data_items, checked, setChecked }) {
   return (
     <tbody>
       {data_items.map((item: string[], i: number) => (
-        <tr className="w-full h-[30px] leading-[20px] font-table table-decor">
+        <tr
+          className={
+            (item[6] === "" ? "table-decor" : "opacity-80 bg-gray-400") +
+            " w-full h-[30px] leading-[20px] font-table"
+          }
+        >
           {/* Checkbox */}
           <td
             className={
@@ -175,56 +178,33 @@ function NoResult() {
 function Table({
   data_headers,
   data_items,
-  setItems,
   checked,
   setChecked,
-  search_value,
-  is_updated,
+  is_hide,
+  setHide,
+  sorted_head,
+  setSorted,
 }) {
-  const [sorted_head, setSorted] = useState<any>([2, true]);
-  // Fetch Table Contents
-  useEffect(() => {
-    const delaySearch = setTimeout(() => {
-      setItems([[]]);
-      const fetchData = async () => {
-        let url = `/api/items?search=${search_value}&sort=${
-          [
-            "",
-            "ID",
-            "name",
-            "color",
-            "weight",
-            "purity",
-            "stones",
-            "date_sold",
-          ][sorted_head[0]]
-        }&ascending=${sorted_head[1]}`;
-        return await axios.get(url).then((results) => results.data);
-      };
-
-      fetchData().then((results) => {
-        results = results.map((result: string[][]) =>
-          Object.values(result).toString().split(",")
-        );
-        // Sample from pool of results
-        setItems(
-          results.map((result: string[][]) =>
-            Object.values(result).toString().split(",")
-          )
-        );
-        setChecked(Array(results.length).fill(false));
-      });
-    }, 500);
-
-    return () => clearTimeout(delaySearch);
-  }, [search_value, sorted_head, is_updated]);
-
   return (
     <div className="max-w-[1100px] m-auto">
-      <div className="h-[20px] ml-[20px] mb-[3px]">
-        {checked.filter((e: boolean) => e).length
-          ? checked.filter((e: boolean) => e).length + " items selected."
-          : ""}
+      <div className="flex justify-between h-[20px] mx-[20px] mb-[5px]">
+        <p
+          className={
+            (checked.filter((e: boolean) => e).length ? "" : "opacity-0") +
+            " transition-all duration-75"
+          }
+        >
+          {checked.filter((e: boolean) => e).length + " items selected."}
+        </p>
+        <label className="">
+          <input
+            className="scale-125"
+            onClick={() => setHide(!is_hide)}
+            checked={is_hide}
+            type="checkbox"
+          />{" "}
+          Only show available items
+        </label>
       </div>
       <div className="mb-[20px] shadow-[5px_10px_10px_5px_#00000024] outline-[1.8px] rounded-t-[10px]">
         <table className="w-full">
