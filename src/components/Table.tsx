@@ -42,7 +42,7 @@ function TableHeader({ data_headers, sorted_head, setSorted }) {
               <img
                 className={
                   (sorted_head[0] === i && !sorted_head[1] && "-scale-100") +
-                  " inline-block w-[30px]"
+                  " float-right mr-[3%] inline-block w-[30px]"
                 }
                 src="./icons/sort.svg"
                 alt="sort"
@@ -106,6 +106,8 @@ function TableBody({ data_items, checked, setChecked }) {
 }
 
 function TableItems({ data_items, checked, setChecked }) {
+  const pad0 = (num: string, len = 4) =>
+    "#" + Array(len + 1 - num.length).join("0") + num;
   return (
     <tbody>
       {data_items.map((item: string[], i: number) => (
@@ -138,7 +140,13 @@ function TableItems({ data_items, checked, setChecked }) {
                 " overflow-hidden border-t-[1.8px] border-l-[1.8px] first:border-l-0"
               }
             >
-              {i === 6 ? (value ? value.slice(0, 10) : "in stock") : value}
+              {i === 0
+                ? pad0(value)
+                : i === 6
+                ? value
+                  ? value.slice(0, 10)
+                  : "in stock"
+                : value}
             </td>
           ))}
         </tr>

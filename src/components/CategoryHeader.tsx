@@ -2,7 +2,7 @@ import { useState } from "react";
 
 function CategoryStatistics({ selected_index }) {
   return (
-    <div className="font-main font-semibold text-[1.2rem] text-text-white border-[2px] border-l-0 border-primary rounded-r-[12px] flex-auto px-[3%] py-[20px] bg-primary-shade">
+    <div className="font-main font-semibold text-[1.2rem] text-text-white border-[2px] border-l-0 border-primary rounded-r-[12px] flex-auto px-[3%] py-[20px] bg-primary">
       <p>Quantity: 856</p>
       <p>In Stock: 704</p>
       <p>Sold: 152</p>
@@ -17,7 +17,7 @@ function CategoryTitle({ categories, selected_index, setSelected }) {
 
   return (
     <div className="w-[55%]">
-      <div className="h-[200px] w-full bg-[url(images/bg-clouds.webp)] bg-cover bg-center rounded-l-[12px]" />
+      <div className="h-[200px] w-full bg-[url(images/wallpaper.png)] bg-cover bg-center rounded-l-[12px]" />
       <div className="relative left-[20px] bottom-[55px] text-text-main font-secondary font-semibold text-[1.2rem] w-[40%] min-w-[150px]">
         <div
           className="bg-white/90 bg rounded-md pl-[20px] py-[3px] cursor-pointer flex justify-between place-items-center-safe"

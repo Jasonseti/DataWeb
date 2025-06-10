@@ -122,7 +122,7 @@ function LoginPage() {
           Don't have an Account? <a href="">Sign Up</a>
         </p> */}
       </div>
-      <div className="h-screen flex-auto lg:bg-[url(images/bg-clouds.webp)] bg-[url(images/bg-forest.jpg)] bg-cover bg-center"></div>
+      <div className="h-screen flex-auto bg-[url(images/wallpaper.png)] bg-cover bg-center"></div>
     </div>
   );
 }

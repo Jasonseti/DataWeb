@@ -3,8 +3,7 @@ function Home() {
     <div className="w-full max-w-[1200px] m-auto">
       <div className="border-2 mb-[10px] h-[100px] w-full rounded-[20px]"></div>
 
-      <div className="h-[780px] w-full flex">
-        {" "}
+      <div className="h-[650pxpx] w-full flex">
         <div className="mr-2 h-full w-[65%]">
           <div className="mb-[10px] border-2 h-[230px] w-full rounded-[20px]">
             <h1 className="font-main font-bold lg:text-[2.5rem] text-[2rem] my-[20px] mx-[2vw]">
