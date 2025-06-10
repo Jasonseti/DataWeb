@@ -1,5 +1,6 @@
 import { Suspense, useEffect, useState } from "react";
 import axios from "axios";
+import { DeviceRequestPromptDevice } from "puppeteer/lib/cjs/puppeteer/puppeteer.js";
 
 const column_widths: string[] = [
   "w-[40px]",
@@ -12,18 +13,41 @@ const column_widths: string[] = [
   "w-[20%]",
 ];
 
-function TableHeader({ data_headers }) {
+function TableHeader({ data_headers, sorted_head, setSorted }) {
   return (
     <thead className="w-full">
       <tr className="w-full h-[30px] leading-[30px] text-center">
         {data_headers.map((head: string, i: number) => (
           <th
+            onClick={
+              [1, 2, 4, 5, 7].includes(i)
+                ? () => {
+                    if (sorted_head[0] === i) {
+                      setSorted([i, !sorted_head[1]]);
+                    } else {
+                      setSorted([i, true]);
+                    }
+                  }
+                : void 0
+            }
             className={
               column_widths[i] +
-              " first:rounded-tl-[10px] last:rounded-tr-[10px] border-b-[1.8px] border-l-[1.8px] first:border-l-0 bg-accent"
+              " " +
+              (sorted_head[0] === i && "bg-orange-300") +
+              " cursor-pointer first:rounded-tl-[10px] last:rounded-tr-[10px] border-b-[1.8px] border-l-[1.8px] first:border-l-0 bg-accent"
             }
           >
             {head}
+            {[1, 2, 4, 5, 7].includes(i) && (
+              <img
+                className={
+                  (sorted_head[0] === i && !sorted_head[1] && "-scale-100") +
+                  " inline-block w-[30px]"
+                }
+                src="./icons/sort.svg"
+                alt="sort"
+              />
+            )}
           </th>
         ))}
       </tr>
@@ -149,13 +173,24 @@ function Table({
   search_value,
   is_updated,
 }) {
+  const [sorted_head, setSorted] = useState<any>([2, true]);
   // Fetch Table Contents
   useEffect(() => {
     const delaySearch = setTimeout(() => {
       setItems([[]]);
-      setChecked(Array(checked.length).fill(false));
       const fetchData = async () => {
-        let url = "/api/items?search=" + search_value;
+        let url = `/api/items?search=${search_value}&sort=${
+          [
+            "",
+            "ID",
+            "name",
+            "color",
+            "weight",
+            "purity",
+            "stones",
+            "date_sold",
+          ][sorted_head[0]]
+        }&ascending=${sorted_head[1]}`;
         return await axios.get(url).then((results) => results.data);
       };
 
@@ -165,36 +200,48 @@ function Table({
         );
         // Sample from pool of results
         setItems(
-          Array(results.length * 10)
-            .fill(null)
-            .map(() => results[Math.floor(Math.random() * results.length)])
+          results.map((result: string[][]) =>
+            Object.values(result).toString().split(",")
+          )
         );
+        setChecked(Array(results.length).fill(false));
       });
     }, 500);
 
     return () => clearTimeout(delaySearch);
-  }, [search_value, is_updated]);
+  }, [search_value, sorted_head, is_updated]);
 
   return (
-    <div className="mb-[20px] shadow-[5px_10px_10px_5px_#00000024] max-w-[1100px] m-auto outline-[1.8px] rounded-t-[10px]">
-      <table className="w-full">
-        <TableHeader data_headers={data_headers} />
-      </table>
-      <Suspense fallback={<Loader />}>
-        {data_items[0] ? (
-          data_items[0][0] ? (
-            <TableBody
-              data_items={data_items}
-              checked={checked}
-              setChecked={setChecked}
-            />
+    <div className="max-w-[1100px] m-auto">
+      <div className="h-[20px] ml-[20px] mb-[3px]">
+        {checked.filter((e: boolean) => e).length
+          ? checked.filter((e: boolean) => e).length + " items selected."
+          : ""}
+      </div>
+      <div className="mb-[20px] shadow-[5px_10px_10px_5px_#00000024] outline-[1.8px] rounded-t-[10px]">
+        <table className="w-full">
+          <TableHeader
+            data_headers={data_headers}
+            sorted_head={sorted_head}
+            setSorted={setSorted}
+          />
+        </table>
+        <Suspense fallback={<Loader />}>
+          {data_items[0] ? (
+            data_items[0][0] ? (
+              <TableBody
+                data_items={data_items}
+                checked={checked}
+                setChecked={setChecked}
+              />
+            ) : (
+              <Loader />
+            )
           ) : (
-            <Loader />
-          )
-        ) : (
-          <NoResult />
-        )}
-      </Suspense>
+            <NoResult />
+          )}
+        </Suspense>
+      </div>
     </div>
   );
 }

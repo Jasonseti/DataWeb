@@ -19,7 +19,7 @@ function DataTable() {
   const [selected_index, setSelected] = useState<number>(0);
   const [search_value, setSearch] = useState<string>("");
   const [data_items, setItems] = useState<string[][]>([[]]);
-  const [checked, setChecked] = useState<boolean[]>(Array(100).fill(false));
+  const [checked, setChecked] = useState<boolean[]>([]);
   const [is_updated, setUpdated] = useState<boolean>(false);
   const update = () => setUpdated(!is_updated);
   return (

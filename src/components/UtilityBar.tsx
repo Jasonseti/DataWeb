@@ -102,7 +102,7 @@ function UtilityBar({
   const [is_openDelete, toggleModalDelete] = useToggle(false);
 
   return (
-    <div className="mb-[67px] lg:mb-[17px] mt-[30px]">
+    <div className="mb-[55px] lg:mb-[17px] mt-[30px]">
       <div className="h-[40px] lg:flex lg:flex-row max-w-[1000px] m-auto">
         <SearchBar search_value={search_value} setSearch={setSearch} />
         <div className="my-[15px] lg:my-[2.5px] h-[48px] sm:h-[35px] lg:flex-auto flex justify-evenly">

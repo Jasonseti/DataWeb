@@ -52,7 +52,9 @@ router.get("/api/items/id", (request, response) => {
     });
 });
 router.get("/api/items", (request, response) => {
-  let query = { name: new RegExp(request.query.search, "i") };
+  const { search, sort, ascending } = request.query;
+  console.log(request.query);
+  let query = { name: new RegExp(search, "i") };
   let options = {
     projection: {
       _id: 0,
@@ -65,7 +67,8 @@ router.get("/api/items", (request, response) => {
       date_sold: { $toString: "$date_sold" },
     },
   };
-  MongoDB.find(query, options)
+  let sort_options = { [sort]: ascending === "true" ? 1 : -1 };
+  MongoDB.find(query, options, sort_options)
     .then((results) => results.toArray())
     .then((results) => {
       console.log("Found " + results.length + " results.");

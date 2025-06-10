@@ -8,7 +8,10 @@
       "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
+    --color-red-300: oklch(80.8% 0.114 19.571);
     --color-red-400: oklch(70.4% 0.191 22.216);
+    --color-orange-300: oklch(83.7% 0.128 66.29);
+    --color-orange-400: oklch(75% 0.183 55.934);
     --color-gray-400: oklch(70.7% 0.022 261.325);
     --color-gray-500: oklch(55.1% 0.027 264.364);
     --color-black: #000;
@@ -191,6 +194,9 @@
   .absolute {
     position: absolute;
   }
+  .fixed {
+    position: fixed;
+  }
   .relative {
     position: relative;
   }
@@ -205,6 +211,9 @@
   }
   .right-\[0px\] {
     right: 0px;
+  }
+  .right-\[20px\] {
+    right: 20px;
   }
   .bottom-\[55px\] {
     bottom: 55px;
@@ -293,6 +302,9 @@
   .-mb-\[700px\] {
     margin-bottom: calc(700px * -1);
   }
+  .mb-\[3px\] {
+    margin-bottom: 3px;
+  }
   .mb-\[10px\] {
     margin-bottom: 10px;
   }
@@ -302,8 +314,20 @@
   .mb-\[20px\] {
     margin-bottom: 20px;
   }
+  .mb-\[50px\] {
+    margin-bottom: 50px;
+  }
+  .mb-\[55px\] {
+    margin-bottom: 55px;
+  }
+  .mb-\[60px\] {
+    margin-bottom: 60px;
+  }
   .mb-\[67px\] {
     margin-bottom: 67px;
+  }
+  .ml-\[20px\] {
+    margin-left: 20px;
   }
   .box-content {
     box-sizing: content-box;
@@ -314,8 +338,17 @@
   .hidden {
     display: none;
   }
+  .inline {
+    display: inline;
+  }
   .inline-block {
     display: inline-block;
+  }
+  .inline-flex {
+    display: inline-flex;
+  }
+  .h-\[20px\] {
+    height: 20px;
   }
   .h-\[30px\] {
     height: 30px;
@@ -383,6 +416,9 @@
   .w-\[20\%\] {
     width: 20%;
   }
+  .w-\[30px\] {
+    width: 30px;
+  }
   .w-\[35\%\] {
     width: 35%;
   }
@@ -406,6 +442,9 @@
   }
   .w-\[65\%\] {
     width: 65%;
+  }
+  .w-\[80\%\] {
+    width: 80%;
   }
   .w-\[100px\] {
     width: 100px;
@@ -443,10 +482,28 @@
   .flex-auto {
     flex: auto;
   }
+  .-scale-100 {
+    --tw-scale-x: calc(100% * -1);
+    --tw-scale-y: calc(100% * -1);
+    --tw-scale-z: calc(100% * -1);
+    scale: var(--tw-scale-x) var(--tw-scale-y);
+  }
+  .scale-2 {
+    --tw-scale-x: 2%;
+    --tw-scale-y: 2%;
+    --tw-scale-z: 2%;
+    scale: var(--tw-scale-x) var(--tw-scale-y);
+  }
   .scale-150 {
     --tw-scale-x: 150%;
     --tw-scale-y: 150%;
     --tw-scale-z: 150%;
+    scale: var(--tw-scale-x) var(--tw-scale-y);
+  }
+  .scale-200 {
+    --tw-scale-x: 200%;
+    --tw-scale-y: 200%;
+    --tw-scale-z: 200%;
     scale: var(--tw-scale-x) var(--tw-scale-y);
   }
   .scale-\[120\%\] {
@@ -466,6 +523,9 @@
   }
   .flex-col {
     flex-direction: column;
+  }
+  .flex-row {
+    flex-direction: row;
   }
   .flex-nowrap {
     flex-wrap: nowrap;
@@ -616,11 +676,20 @@
   .bg-gray-500 {
     background-color: var(--color-gray-500);
   }
+  .bg-orange-300 {
+    background-color: var(--color-orange-300);
+  }
+  .bg-orange-400 {
+    background-color: var(--color-orange-400);
+  }
   .bg-primary {
     background-color: var(--color-primary);
   }
   .bg-primary-shade {
     background-color: var(--color-primary-shade);
+  }
+  .bg-red-300 {
+    background-color: var(--color-red-300);
   }
   .bg-red-400 {
     background-color: var(--color-red-400);
