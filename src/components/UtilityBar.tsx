@@ -44,12 +44,15 @@ function FunctionBar({ title, icon, func, tooltip = <></> }) {
 
 function Tooltip({ banner, is_tooltip, setTooltip }) {
   useEffect(() => {
-    let timer = setTimeout(() => setTooltip(false), 2000);
+    let timer = setTimeout(() => {
+      setTooltip(false);
+    }, 2000);
     return () => clearTimeout(timer);
   }, [is_tooltip, setTooltip]);
   return (
     <div className="absolute">
       <p
+        id="tooltip"
         className={
           (is_tooltip
             ? "bottom-[40px] duration-250"
@@ -163,6 +166,7 @@ function UtilityBar({
                 checkCheck() ? toggleModalEdit() : setTooltipEdit(true)
               }
               tooltip={
+                // A little bug where tooltip is in front add button
                 <Tooltip
                   banner={"Select 1 document."}
                   is_tooltip={is_tooltipEdit}

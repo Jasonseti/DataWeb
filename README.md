@@ -15,4 +15,23 @@ Timeline:
 04-06 / Set up APIs + add .vscode tasks
 07-06 / Set up Get and Modal Form
 08-06 / Set up Post, Put, and Delete + Login Authentication
-09-06 / Re-learning Tensorflow and Python
+09-06 / Finish Frontend Design
+11-06 / Re-learning Tensorflow and Python
+12-06 / Setup Python Environment in VSCode
+13-06 / Tesseract OCR + Keras OCR
+14-06 / Building and Testing
+15-06 / Hosting + Final
+
+Plugins Used:
+HTML: React
+CSS: PostCSS, Tailwind
+JS: ESLint-g, Typescript
+
+Server-side: NodeJS-g, lodash, Tesseract, TrOCR, EAST
+API: Express, Cors, Axios, fastapi, uvicorn, Thunder Client
+Authorization: JWT
+Database: MongoDB, Snappy
+
+Testing: Jest
+Launching: Webpack, Docker
+Hosting: Vercel

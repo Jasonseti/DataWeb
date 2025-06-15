@@ -4,6 +4,11 @@
 /node_modules
 /.pnp
 .pnp.js
+__pycache__
+/env
+/.venv
+/.vscode
+
 
 # testing
 /coverage

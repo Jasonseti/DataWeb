@@ -1,28 +1,35 @@
 {
-    // See https://go.microsoft.com/fwlink/?LinkId=733558
-    // for the documentation about the tasks.json format
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "Start App",
-            "type": "shell",
-            "command": "npm start",
-            "presentation": { "reveal": "always", "panel": "new" },
-            "runOptions": { "runOn": "folderOpen" }
-        },
-        {
-            "label": "Start PostCSS",
-            "type": "shell",
-            "command": "npm run postcss",
-            "presentation": { "reveal": "always", "panel": "new" },
-            "runOptions": { "runOn": "folderOpen" }
-        },
-        {
-            "label": "Start Server",
-            "type": "shell",
-            "command": "npm run server",
-            "presentation": { "reveal": "always", "panel": "new" },
-            "runOptions": { "runOn": "folderOpen" }
-        }
-    ]
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "React App",
+      "type": "shell",
+      "command": "npm start",
+      "presentation": { "reveal": "always", "panel": "new" },
+      "runOptions": { "runOn": "folderOpen" }
+    },
+    {
+      "label": "PostCSS",
+      "type": "shell",
+      "command": "npm run postcss",
+      "presentation": { "reveal": "always", "panel": "new" },
+      "runOptions": { "runOn": "folderOpen" }
+    },
+    {
+      "label": "Node Server",
+      "type": "shell",
+      "command": "npm run server",
+      "presentation": { "reveal": "always", "panel": "new" },
+      "runOptions": { "runOn": "folderOpen" }
+    },
+    {
+      "label": "Python Server",
+      "type": "shell",
+      "command": "npm run py-server",
+      "presentation": { "reveal": "always", "panel": "new" },
+      "runOptions": { "runOn": "folderOpen" }
+    }
+  ]
 }

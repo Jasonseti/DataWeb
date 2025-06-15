@@ -14,9 +14,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "postcss": "postcss src/index.css --dir public --watch",
-    "server": "nodemon ./server/server.js"
+    "server": "nodemon ./server/server.js",
+    "py-server": "uvicorn server.server:app --reload"
   },
-  "proxy": "http://localhost:2000",
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -48,6 +48,7 @@
     "eslint-plugin-react": "^7.37.5",
     "express": "^5.1.0",
     "globals": "^16.2.0",
+    "http-proxy-middleware": "^3.0.5",
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",
     "mongodb": "^6.16.0",

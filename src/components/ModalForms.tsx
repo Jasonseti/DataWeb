@@ -10,9 +10,9 @@ const modal_styles = {
     bottom: "auto",
     marginRight: "-50%",
     transform: "translate(-50%, -50%)",
-    borderRadius: "10%",
-    padding: "4%",
-    paddingTop: "3%",
+    borderRadius: "2rem",
+    padding: "3rem",
+    paddingTop: "2.2rem",
   },
 };
 
@@ -94,8 +94,18 @@ function ModalAdd({
   closeModal,
   categories,
   selected_category,
+  setTranscript,
   update,
 }) {
+  const [selected_image, setImage] = useState<any>(null);
+  const postImage = () => {
+    var document = new FormData();
+    document.append("image", selected_image);
+    axios
+      .post("http://localhost:8000/api/read_image", document)
+      .then((result) => result.data.transcript)
+      .then((transcript) => alert(transcript));
+  };
   const initial_state = [
     "",
     "Gold",
@@ -105,7 +115,6 @@ function ModalAdd({
     selected_category ? categories[selected_category] : "",
   ];
   const [state, setState] = useState<string[]>(initial_state);
-  const resetState = () => setState(initial_state);
   const postData = () => {
     const fetchID = async () => {
       return axios.get("/api/items/id").then((results) => results.data.ID);
@@ -129,6 +138,11 @@ function ModalAdd({
       .then((document) => axios.post("/api/items", document))
       .then(() => update());
   };
+  const resetState = () => {
+    setState(initial_state);
+    setImage(null);
+  };
+
   return (
     <Modal
       isOpen={is_open}
@@ -138,7 +152,50 @@ function ModalAdd({
     >
       <FormHeader title={"Add Item"} closeModal={closeModal} />
       {/* Add Form */}
+      <form className="w-[220px] relative">
+        <h3 className="text-main font-semibold text-[1.2rem]">Upload Image</h3>
+        <div className="flex flex-col justify-center p-[5px] mt-[5px] w-full h-[100px] border-1 border-dashed rounded-[2px] cursor-pointer bg-gray-300">
+          <img
+            className={
+              (!selected_image && "opacity-50 scale-75 h-[100%]") +
+              " object-contain h-[80%]"
+            }
+            alt=""
+            src={
+              selected_image
+                ? URL.createObjectURL(selected_image)
+                : "/icons/photo.svg"
+            }
+          />
+          <p className="h-[20%] mb-[3px] text-center">
+            {selected_image && selected_image.name}
+          </p>
+        </div>
+        <input
+          type="file"
+          name="image_file"
+          onChange={(e) => {
+            if (e.target.files) {
+              setImage(e.target.files[0]);
+            }
+          }}
+          className="absolute top-[28px] left-[0px] mt-[5px] opacity-0 w-full h-[100px] cursor-pointer bg-accent"
+        />
+        <input
+          type="submit"
+          onClick={(e) => {
+            e.preventDefault();
+            postImage();
+            closeModal();
+            resetState();
+          }}
+          className="w-full cursor-pointer rounded-[5px] bg-accent p-[7.5px] my-[5px]"
+        />
+      </form>
       <form className="w-[220px] mt-2 flex flex-col">
+        <h3 className="text-main font-semibold text-[1.2rem]">
+          Input Manually
+        </h3>
         {selected_category === 0 && (
           <div className="flex justify-between">
             <div className="m-auto text-center text-[18px] w-[90px]">
