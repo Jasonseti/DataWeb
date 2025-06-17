@@ -1,8 +1,7 @@
 from sklearn.cluster import KMeans
 import pytesseract
 import numpy as np
-import imutils
-import cv2
+import cv2, re
 
 def show_image(image):
     ratio = min(800 / image.shape[0], 1600 / image.shape[1])
@@ -27,20 +26,16 @@ def find_boxes(image):
     # Find boxes
     contours, hierarchies = cv2.findContours(
         image,
-        cv2.RETR_EXTERNAL,
+        cv2.RETR_TREE,
         cv2.CHAIN_APPROX_SIMPLE
     )
     boxes = []
     for contour, hierarchy in zip(contours, hierarchies[0]):
-        pass_area_limit = 1000 < cv2.contourArea(contour) < 4e5
-        shape_is_closed = hierarchy[2] < 0 and hierarchy[3] < 0
-        shape_is_squarish = np.divide(
-            cv2.arcLength(contour, closed=True),
-            np.sqrt(cv2.contourArea(contour))
-        ) < 6.9
-        if pass_area_limit and shape_is_closed and shape_is_squarish:
+        x, y, w, h = cv2.boundingRect(contour)
+        pass_area_limit = 5000 < cv2.contourArea(contour) < 4e5
+        shape_is_squarish = 10 * w > h and 10 * h > w
+        if pass_area_limit and shape_is_squarish:
             # boxes in x1, y1, x2, y2 format
-            x, y, w, h = cv2.boundingRect(contour)
             boxes.append([x, y, x + w, y + h])
             
     return np.array(boxes)
@@ -83,21 +78,30 @@ def segment_and_read_image(image, box_clusters, config="", view_segments=False):
                 output_type=pytesseract.Output.DICT
             )
             text = "".join(data["text"]).replace("\n", "")
+            if j in [1, 4, 5]:
+                text = text.lower() 
+            if j in [0]:
+                text = re.sub(r"(\w)([A-Z])", r"\1 \2", text).strip()
+                text = text[0].upper() + text[1:]
+            if j in [4]:
+                text = text if len(text) > 2 else '-'
             transcript[i].append(text)
             
             if view_segments:
-                # Draw grid line
-                cv2.rectangle(image_copy, (x1, y1), (x2, y2), 
-                            (0, 255, 0), 5, cv2.LINE_AA)
                 # Draw Tesseract box
                 for k in range(len(data['level'])):
                     x, y, w, h = data['left'][k], data['top'][k], data['width'][k], data['height'][k]
                     cv2.rectangle(image_copy, (x1 + x, y1 + y), (x1 + x + w, y1 + y + h), 
-                                  (255, 0, 0), 2)
+                                  (255, 0, 0), 4)
+                # Draw grid line
+                cv2.rectangle(image_copy, (x1, y1), (x2, y2), 
+                              (0, 255, 0), 10, cv2.LINE_AA)
+                cv2.putText(image_copy, str(j + 1) + '| ', (x1, y1 + 10),
+                            cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 3)
                 # Put Tesseract text
-                cv2.putText(image_copy, str(j + 1) + "| " +  text, 
-                            (x1 + 10, y1 + 50), cv2.FONT_HERSHEY_SIMPLEX,
-                            1.8, (0, 0, 255), 3)
+                cv2.putText(image_copy, text, 
+                            (x1 + 50, y1 + 10), cv2.FONT_HERSHEY_SIMPLEX,
+                            1.8, (255, 0, 0), 3)
         
     if view_segments:
         show_image(image_copy)
@@ -117,9 +121,9 @@ def ocr(image, config="", view_segments=False):
     
     return transcript
 
-# image = cv2.imread("./server/ocr/sample/test.jpeg")
-# transcript = ocr(image, config=r"--psm 7", view_segments=True)
-# print(transcript)
+image = cv2.imread("./server/ocr/sample/final.jpeg")
+transcript = ocr(image, config=r"--psm 7", view_segments=True)
+print(transcript)
 
 # Page segmentation modes:
 #   0    Orientation and script detection (OSD) only.

@@ -7,8 +7,8 @@ from fastapi.encoders import jsonable_encoder
 
 from PIL import Image
 from io import BytesIO
-from server.ocr import tesseract
-# from server.ocr import transformer
+# from server.ocr import tesseract
+from server.ocr import tf
 
 app = FastAPI()
 app.add_middleware(
@@ -21,9 +21,8 @@ def read_image(image: UploadFile = File(...)):
     try:
         image = image.file.read()
         image = Image.open(BytesIO(image))
-        text = tesseract.ocr(image, config=r"--psm 7")
-        del text[-1][1]
-        response = { "transcript": text }
+        transcript = tf.ocr(image)
+        response = { "transcript": transcript }
         return JSONResponse(content=jsonable_encoder(response), status_code=status.HTTP_200_OK)
     except (HTTPException):
         return HTTPException

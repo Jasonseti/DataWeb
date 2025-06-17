@@ -304,7 +304,7 @@ function ModalEdit({
       new_state[6] = categories[selected_category];
       setState(new_state);
     }
-  }, [is_open]); // ignore warning, may cause error
+  }, [is_open]); // ignore warning, will cause error
   const updateData = async () => {
     let document = {
       ID: Number(data_items[checked.indexOf(true)][0]),
@@ -550,7 +550,7 @@ function ModalTranscript({
             {transcript.map((item: string[], i: number) => (
               <tr
                 className={
-                  (is_included[i] ? "table-decor" : "opacity-50 bg-gray-400") +
+                  (is_included[i] ? "table-decor" : "opacity-50 bg-gray-600") +
                   " w-full h-[30px] leading-[20px] font-table"
                 }
               >

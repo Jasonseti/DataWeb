@@ -111,7 +111,7 @@ function TableItems({ data_items, checked, setChecked }) {
       {data_items.map((item: string[], i: number) => (
         <tr
           className={
-            (item[6] === "" ? "table-decor" : "opacity-80 bg-gray-400") +
+            (item[6] === "" ? "table-decor" : "opacity-80 bg-gray-500") +
             " w-full h-[30px] leading-[20px] font-table"
           }
         >
