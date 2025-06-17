@@ -75,10 +75,10 @@ function InputDate({ name, index, state, setState }) {
 
 // function validateInput(state) {}
 
-function FormHeader({ title, closeModal }) {
+function FormHeader({ title, closeModal, font_size = "text-[24px]" }) {
   return (
     <div className="flex justify-between -m-[2px]">
-      <h2 className="font-main font-bold text-[24px]">{title}</h2>
+      <h2 className={"font-main font-bold " + font_size}>{title}</h2>
       <button
         className="fill-black cursor-pointer hover:bg-accent-shade p-[1vw] rounded-[1vw]"
         onClick={closeModal}
@@ -94,6 +94,7 @@ function ModalAdd({
   closeModal,
   categories,
   selected_category,
+  toggleModalTranscript,
   setTranscript,
   update,
 }) {
@@ -104,7 +105,10 @@ function ModalAdd({
     axios
       .post("http://localhost:8000/api/read_image", document)
       .then((result) => result.data.transcript)
-      .then((transcript) => alert(transcript));
+      .then((transcript) => {
+        setTranscript(transcript);
+        toggleModalTranscript();
+      });
   };
   const initial_state = [
     "",
@@ -300,7 +304,7 @@ function ModalEdit({
       new_state[6] = categories[selected_category];
       setState(new_state);
     }
-  }, [is_open]);
+  }, [is_open]); // ignore warning, may cause error
   const updateData = async () => {
     let document = {
       ID: Number(data_items[checked.indexOf(true)][0]),
@@ -423,7 +427,7 @@ function ModalDelete({ is_open, closeModal, data_items, checked, update }) {
   const Button = ({ value, bg, onClick }) => (
     <button
       onClick={onClick}
-      className={`${bg} cursor-pointer w-[150px] h-[60px] rounded-[20px] mx-[20px]`}
+      className={`${bg} text-[20px] font-secondary font-semibold cursor-pointer w-[150px] h-[60px] rounded-[20px] mx-[20px]`}
     >
       {value}
     </button>
@@ -453,4 +457,163 @@ function ModalDelete({ is_open, closeModal, data_items, checked, update }) {
     </Modal>
   );
 }
-export { ModalAdd, ModalEdit, ModalDelete };
+
+function ModalTranscript({
+  is_open,
+  closeModal,
+  categories,
+  selected_category,
+  transcript,
+  setTranscript,
+  update,
+}) {
+  const [is_included, setIncluded] = useState<boolean[]>([]);
+  useEffect(() => {
+    setIncluded(Array(transcript.length).fill(true));
+  }, [transcript]);
+  const postData = (state: string[], nextID: number) => {
+    let document = {
+      ID: Number(nextID),
+      name: state[0],
+      color: state[1].toLowerCase(),
+      weight: Number(state[2]),
+      purity: Number(state[3]),
+      stones: state[4].toLowerCase(),
+      date_sold: null,
+      category: selected_category
+        ? categories[selected_category].toLowerCase()
+        : null,
+    };
+    alert(JSON.stringify(document));
+    axios.post("/api/items", document);
+  };
+  const postTranscript = async () => {
+    let nextID = await axios
+      .get("/api/items/id")
+      .then((results) => results.data.ID);
+    for (let i in transcript) {
+      if (is_included[i]) {
+        nextID = nextID + 1;
+        postData(transcript[i], nextID);
+      }
+    }
+  };
+  const column_widths: string[] = [
+    "w-auto",
+    "w-[15%]",
+    "w-[10%]",
+    "w-[10%]",
+    "w-[15%]",
+    "w-[20%]",
+    "w-[40px]",
+  ];
+  const data_headers = [
+    "Name",
+    "Color",
+    "Weight",
+    "Purity",
+    "Stones",
+    "Date Sold",
+  ];
+  return (
+    <Modal
+      isOpen={is_open}
+      onRequestClose={closeModal}
+      contentLabel="Transcript Form"
+      style={modal_styles}
+    >
+      <FormHeader
+        title="Transcript Results"
+        font_size="text-[32px]"
+        closeModal={closeModal}
+      />
+      <p className="ml-[10px] mt-[10px]">
+        {"Found " + is_included.filter((e) => e).length + " new items"}
+      </p>
+      <form className="flex flex-row justify-center w-[80vw] max-w-[880px]">
+        <table className="outline-[1.8px] rounded-t-[10px] w-[93%]">
+          <thead className="w-full">
+            <tr className="w-[93%] h-[30px] leading-[30px] text-center">
+              {data_headers.map((head: string, i: number) => (
+                <th
+                  className={
+                    column_widths[i] +
+                    " cursor-pointer first:rounded-tl-[10px] last:rounded-tr-[10px] border-b-[1.8px] border-l-[1.8px] first:border-l-0 bg-accent"
+                  }
+                >
+                  {head}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {transcript.map((item: string[], i: number) => (
+              <tr
+                className={
+                  (is_included[i] ? "table-decor" : "opacity-50 bg-gray-400") +
+                  " w-full h-[30px] leading-[20px] font-table"
+                }
+              >
+                {item.map((value: string, j: number) => (
+                  <td
+                    className={
+                      column_widths[j] +
+                      " overflow-hidden first:border-l-0 last: border-r-0 border-b-0 border-[1.8px]"
+                    }
+                  >
+                    <input
+                      className={
+                        (j === 0 ? "px-[1vw]" : "text-center") +
+                        " focus:outline-none w-full h-full"
+                      }
+                      value={value}
+                      type="text"
+                      onChange={(e) => {
+                        setTranscript(
+                          transcript.toSpliced(
+                            i,
+                            1,
+                            transcript[i].toSpliced(j, 1, e.target.value)
+                          )
+                        );
+                      }}
+                    />
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <div className="w-[7%] px-[5px] relative top-[30px]">
+          {is_included.map((included: boolean, i: number) => (
+            <div
+              className={
+                (included
+                  ? "bg-[url(icons/delete.svg)] bg-accent"
+                  : "bg-[url(icons/reload.svg)] bg-gray-400") +
+                " bg-center bg-no-repeat rounded-[5px] cursor-pointer hover:bg-gray-400 h-[28px] my-[2px] first:mt-[1px] last:mb-[1px]"
+              }
+              onClick={() => {
+                let new_array = is_included.slice();
+                new_array = new_array.fill(!is_included[i], i, i + 1);
+                setIncluded(new_array);
+              }}
+            ></div>
+          ))}
+        </div>
+      </form>
+      <input
+        type="submit"
+        value="Add to Database"
+        className="text-[20px] font-secondary font-semibold border-1 mt-[20px] w-[30vw] max-w-[300px] h-[40px] float-right relative right-[50px] rounded-[10px] border-none bg-accent hover:bg-accent-shade cursor-pointer "
+        onClick={async (e) => {
+          e.preventDefault();
+          await postTranscript();
+          update();
+        }}
+      />
+    </Modal>
+  );
+}
+
+export { ModalAdd, ModalEdit, ModalDelete, ModalTranscript };

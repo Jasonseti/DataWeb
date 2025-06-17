@@ -73,6 +73,7 @@ function DataTable() {
         selected_category={selected_category}
         setCategory={setCategory}
         update={update}
+        is_updated={is_updated}
       />
       <UtilityBar
         categories={categories}

@@ -30,10 +30,10 @@ def sort_boxes(boxes, k):
         
 def east_detect(image, dimension=[], stretch=1.0, min_confidence=0.5, k=0, view_boxes=False):
     original_image = image.copy()
-    original_dimension = original_image.shape[:2]
     if len(image.shape) == 2:
         image = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
     
+    original_dimension = original_image.shape[:2]
     dimension = dimension if dimension else get_optimal_dimension(image)
     H, W = image.shape[:2]
     image = cv2.resize(image, dimension)
@@ -94,10 +94,10 @@ def east_detect(image, dimension=[], stretch=1.0, min_confidence=0.5, k=0, view_
                             0.8, (0, 0, 255), 3)
         
     if view_boxes:
-        ratio = min(800 / image_copy.shape[0], 1600 / image_copy.shape[1])
+        ratio = min(800 / original_dimension[0], 1600 / original_dimension[1])
         cv2.imshow("", cv2.resize(image_copy, [0, 0], fx=ratio, fy=ratio))
         cv2.waitKey()
     return image_segments
 
-# image = cv2.imread("./server/ocr/sample/jamine.jpg")
-# east_detect(image, stretch=1.5, min_confidence=0.2, view_boxes=True)
+image = cv2.imread("./server/ocr/sample/test.jpeg")
+east_detect(image, k=4, stretch=1.5, min_confidence=0.2, view_boxes=True)

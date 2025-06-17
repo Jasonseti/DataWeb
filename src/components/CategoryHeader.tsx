@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-function CategoryStatistics({ categories, selected_category }) {
+function CategoryStatistics({ categories, selected_category, is_updated }) {
   const [statistics, setStatistics] = useState<string[][]>([[]]);
   useEffect(() => {
     axios
@@ -21,7 +21,7 @@ function CategoryStatistics({ categories, selected_category }) {
         ];
         setStatistics(results);
       });
-  }, [categories]);
+  }, [categories, is_updated]);
 
   return (
     <div className="font-main font-semibold text-[1.2rem] text-text-white border-[2px] border-l-0 border-primary rounded-r-[12px] flex-auto px-[3%] py-[20px] bg-primary">
@@ -36,7 +36,7 @@ function CategoryStatistics({ categories, selected_category }) {
   );
 }
 
-function CategoryTitle({ categories, selected_category, setCategory, update }) {
+function CategoryTitle({ categories, selected_category, setCategory }) {
   const [is_folded, setFolded] = useState<boolean>(true);
   const toggleFolded = () => setFolded(!is_folded);
 
@@ -100,6 +100,7 @@ function CategoryHeader({
   selected_category,
   setCategory,
   update,
+  is_updated,
 }) {
   return (
     <div className="shadow-[10px_20px_20px_10px_#00000040] rounded-[12px] m-auto max-w-[1000px] h-[200px] flex">
@@ -107,11 +108,11 @@ function CategoryHeader({
         categories={categories}
         selected_category={selected_category}
         setCategory={setCategory}
-        update={update}
       />
       <CategoryStatistics
         categories={categories}
         selected_category={selected_category}
+        is_updated={is_updated}
       />
     </div>
   );

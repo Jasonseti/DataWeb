@@ -21,8 +21,8 @@ def read_image(image: UploadFile = File(...)):
     try:
         image = image.file.read()
         image = Image.open(BytesIO(image))
-        text = tesseract.ocr(image, config=r"-l eng --psm 4")
-        
+        text = tesseract.ocr(image, config=r"--psm 7")
+        del text[-1][1]
         response = { "transcript": text }
         return JSONResponse(content=jsonable_encoder(response), status_code=status.HTTP_200_OK)
     except (HTTPException):

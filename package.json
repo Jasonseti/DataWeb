@@ -17,6 +17,7 @@
     "server": "nodemon ./server/server.js",
     "py-server": "uvicorn server.server:app --reload"
   },
+  "proxy": "http://localhost:2000",
   "eslintConfig": {
     "extends": [
       "react-app",

@@ -1,7 +1,7 @@
 from sklearn.cluster import KMeans
-import pytesseract
+from tf_model import OCR
+import tensorflow as tf
 import numpy as np
-import imutils
 import cv2
 
 def show_image(image):
@@ -68,42 +68,74 @@ def cluster_and_sort_boxes(boxes, k):
         
     return box_clusters
     
-def segment_and_read_image(image, box_clusters, config="", view_segments=False):
+def segment_and_read_image(model, image, box_clusters, view_segments=False):
+    def segment_image(image, box):
+        x1, y1, x2, y2 = box
+        cropped_image = image[y1: y2, x1: x2]
+        
+        if view_segments:
+            cv2.rectangle(image_copy, (x1, y1), (x2, y2), 
+                          (0, 255, 0), 10, cv2.LINE_AA)
+            
+        return cropped_image
+    
+    def find_letters(image, offset):
+        contours, hierarchies = cv2.findContours(
+            image,
+            cv2.RETR_TREE,
+            cv2.CHAIN_APPROX_SIMPLE
+        )
+        
+        letter_boxes = []
+        for contour, hierarchy in zip(contours, hierarchies[0]):
+            if cv2.contourArea(contour) > 100 and hierarchy[3] > -1:
+                # boxes in x, y, w, h format
+                letter_boxes.append(cv2.boundingRect(contour))
+        letter_boxes = sorted(letter_boxes, key=lambda x: x[0])
+
+        cropped_letters = []
+        offset_x, offset_y = offset
+        for i, letter_box in enumerate(letter_boxes):
+            x, y, w, h = letter_box
+            cropped_letters.append(image[y: y + h, x: x + w])
+            
+            if view_segments:
+                cv2.rectangle(image_copy, (offset_x + x, offset_y + y), (offset_x + x + w, offset_y + y + h), 
+                              (255, 0, 0), 4)
+                cv2.putText(image_copy, str(i + 1), (offset_x + x, offset_y + y + 10), 
+                            cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 3)
+        
+        return cropped_letters
+    
+    def predict_letters(letters, offset):
+        letters = np.array([cv2.resize(letter, [28, 28]) for letter in letters])
+        text = model.predict(letters, invert=True) if len(letters) > 0 else ""
+        text = "".join(text)
+        
+        if view_segments:
+            offset_x, offset_y = offset
+            cv2.putText(image_copy, text, (offset_x, offset_y + 10), 
+                        cv2.FONT_HERSHEY_SIMPLEX, 2.0, (0, 0, 255), 3)
+            
+        return text
+    
     # Segment and read image by cluster hierarchy
     transcript = [[] for _ in range(len(box_clusters))]
     if view_segments:
         image_copy = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
     for i, boxes in enumerate(box_clusters):
-        for j, box in enumerate(boxes):
-            x1, y1, x2, y2 = box
-            cropped_image = image[y1: y2, x1: x2]
-            data = pytesseract.image_to_data(
-                cropped_image, 
-                config=config, 
-                output_type=pytesseract.Output.DICT
-            )
-            text = "".join(data["text"]).replace("\n", "")
-            transcript[i].append(text)
+        for box in boxes:
+            cropped_image = segment_image(image, box)
+            cropped_letters = find_letters(cropped_image, offset=box[:2])
             
-            if view_segments:
-                # Draw grid line
-                cv2.rectangle(image_copy, (x1, y1), (x2, y2), 
-                            (0, 255, 0), 5, cv2.LINE_AA)
-                # Draw Tesseract box
-                for k in range(len(data['level'])):
-                    x, y, w, h = data['left'][k], data['top'][k], data['width'][k], data['height'][k]
-                    cv2.rectangle(image_copy, (x1 + x, y1 + y), (x1 + x + w, y1 + y + h), 
-                                  (255, 0, 0), 2)
-                # Put Tesseract text
-                cv2.putText(image_copy, str(j + 1) + "| " +  text, 
-                            (x1 + 10, y1 + 50), cv2.FONT_HERSHEY_SIMPLEX,
-                            1.8, (0, 0, 255), 3)
+            text = predict_letters(cropped_letters, offset=box[:2])
+            transcript[i].append(text)
         
     if view_segments:
         show_image(image_copy)
     return transcript
 
-def ocr(image, config="", view_segments=False):
+def ocr(image, view_segments=False):
     image = np.array(image)
     image = preprocess_image(image)
     
@@ -111,29 +143,11 @@ def ocr(image, config="", view_segments=False):
     box_clusters = cluster_and_sort_boxes(boxes, k=4)
     
     transcript = segment_and_read_image(
-        image, box_clusters, 
-        config=config, view_segments=view_segments
+        OCR, image, box_clusters, view_segments=view_segments
     )
     
     return transcript
 
-# image = cv2.imread("./server/ocr/sample/test.jpeg")
-# transcript = ocr(image, config=r"--psm 7", view_segments=True)
-# print(transcript)
-
-# Page segmentation modes:
-#   0    Orientation and script detection (OSD) only.
-#   1    Automatic page segmentation with OSD.
-#   2    Automatic page segmentation, but no OSD, or OCR. (not implemented)
-#   3    Fully automatic page segmentation, but no OSD. (Default)
-#   4    Assume a single column of text of variable sizes.
-#   5    Assume a single uniform block of vertically aligned text.
-#   6    Assume a single uniform block of text.
-#   7    Treat the image as a single text line.
-#   8    Treat the image as a single word.
-#   9    Treat the image as a single word in a circle.
-#  10    Treat the image as a single character.
-#  11    Sparse text. Find as much text as possible in no particular order.
-#  12    Sparse text with OSD.
-#  13    Raw line. Treat the image as a single text line,
-#        bypassing hacks that are Tesseract-specific.
+image = cv2.imread("./server/ocr/sample/test.jpeg")
+transcript = ocr(image, view_segments=True)
+print(transcript)

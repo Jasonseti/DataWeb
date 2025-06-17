@@ -1,4 +1,9 @@
-import { ModalAdd, ModalEdit, ModalDelete } from "./ModalForms.tsx";
+import {
+  ModalAdd,
+  ModalEdit,
+  ModalDelete,
+  ModalTranscript,
+} from "./ModalForms.tsx";
 import { useEffect, useState } from "react";
 
 function SearchBar({ search_value, setSearch }) {
@@ -31,14 +36,16 @@ function SearchBar({ search_value, setSearch }) {
 
 function FunctionBar({ title, icon, func, tooltip = <></> }) {
   return (
-    <div
-      onClick={func}
-      className="z-0 px-[1vw] sm:flex h-full bg-accent hover:bg-accent-shade active:bg-gray-500 transition duration-75 ease border-l-[1.5px] first:border-l-0 first:rounded-l-[10px] last:rounded-r-[10px] place-items-center"
-    >
-      {tooltip}
-      <div className="mr-[2px] fill-text-black">{icon}</div>
-      <p className="font-secondary text-text-black">{title}</p>
-    </div>
+    <>
+      <div
+        onClick={func}
+        className="z-0 px-[1vw] sm:flex h-full bg-accent hover:bg-accent-shade active:bg-gray-500 transition duration-75 ease border-l-[1.5px] first:border-l-0 first:rounded-l-[10px] last:rounded-r-[10px] place-items-center"
+      >
+        {tooltip}
+        <div className="mr-[2px] fill-text-black">{icon}</div>
+        <p className="font-secondary text-text-black">{title}</p>
+      </div>
+    </>
   );
 }
 
@@ -48,16 +55,16 @@ function Tooltip({ banner, is_tooltip, setTooltip }) {
       setTooltip(false);
     }, 2000);
     return () => clearTimeout(timer);
-  }, [is_tooltip, setTooltip]);
+  }, [banner, is_tooltip, setTooltip]);
   return (
-    <div className="absolute">
+    <div className="pointer-events-none absolute">
       <p
-        id="tooltip"
+        id={banner}
         className={
           (is_tooltip
             ? "bottom-[40px] duration-250"
             : "duration-500 bottom-[0px] opacity-0") +
-          " transition-all rounded-[5px] bg-red-400 p-1 relative right-[55px]"
+          " pointer-events-none transition-all rounded-[5px] bg-red-400 p-1 relative right-[55px]"
         }
       >
         {banner}
@@ -128,7 +135,15 @@ function UtilityBar({
   const [is_openDelete, toggleModalDelete] = useToggle(false);
   const [is_tooltipEdit, setTooltipEdit] = useState(false);
   const [is_tooltipDelete, setTooltipDelete] = useState(false);
+  const [is_openTranscript, toggleModalTranscript] = useToggle(false);
+  const [transcript, setTranscript] = useState<string[][]>([
+    ["Gelang Baby Gadjah HK", "rosegold", "5.5", "0.7", "ruby"],
+    ["Gelang Baby Gadjah HK", "rosegold", "5.5", "0.7", "ruby"],
+    ["Gelang Baby Gadjah HK", "rosegold", "5.5", "0.7", "ruby"],
+    ["Gelang Baby Gadjah HK", "rosegold", "5.5", "0.7", "ruby"],
+  ]);
   const checkCheck = () => checked.indexOf(true) !== -1;
+
   return (
     <div className="mb-[55px] lg:mb-[17px] mt-[30px]">
       <div className="h-[40px] lg:flex lg:flex-row max-w-[1000px] m-auto">
@@ -147,6 +162,17 @@ function UtilityBar({
               closeModal={toggleModalAdd}
               categories={categories}
               selected_category={selected_category}
+              toggleModalTranscript={toggleModalTranscript}
+              setTranscript={setTranscript}
+              update={update}
+            />
+            <ModalTranscript
+              is_open={is_openTranscript}
+              closeModal={toggleModalTranscript}
+              categories={categories}
+              selected_category={selected_category}
+              transcript={transcript}
+              setTranscript={setTranscript}
               update={update}
             />
             <FunctionBar title={"Add"} icon={icons[1]} func={toggleModalAdd} />
