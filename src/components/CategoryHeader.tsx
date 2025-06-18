@@ -24,14 +24,16 @@ function CategoryStatistics({ categories, selected_category, is_updated }) {
   }, [categories, is_updated]);
 
   return (
-    <div className="font-main font-semibold text-[1.2rem] text-text-white border-[2px] border-l-0 border-primary rounded-r-[12px] flex-auto px-[3%] py-[20px] bg-primary">
+    <div className="font-main font-semibold text-[1.2rem] text-text-white border-[2px] border-l-0 border-primary rounded-r-[12px] flex-auto px-[3%] py-[30px] leading-[35px] bg-primary">
       <p>
         In Stock:{" "}
         {Number(statistics[selected_category][0]) -
           Number(statistics[selected_category][2])}
       </p>
       <p>Sold: {statistics[selected_category][2]}</p>
-      <p>Total Gold: {statistics[selected_category][1]} grams</p>
+      <p>
+        Total Gold: {Number(statistics[selected_category][1]).toFixed(2)} grams
+      </p>
     </div>
   );
 }

@@ -4,7 +4,7 @@ import UtilityBar from "../components/UtilityBar.tsx";
 import Table from "../components/Table.tsx";
 import axios from "axios";
 
-const categories: string[] = ["Mix", "Foo", "Bar"];
+const categories: string[] = ["Mix", "Bracelet", "Earring", "Necklace", "Ring"];
 const data_headers: string[] = [
   "",
   "ID",

@@ -873,6 +873,12 @@
   .py-\[20px\] {
     padding-block: 20px;
   }
+  .py-\[30px\] {
+    padding-block: 30px;
+  }
+  .py-\[50px\] {
+    padding-block: 50px;
+  }
   .pl-\[5px\] {
     padding-left: 5px;
   }
@@ -940,6 +946,10 @@
   .leading-\[30px\] {
     --tw-leading: 30px;
     line-height: 30px;
+  }
+  .leading-\[35px\] {
+    --tw-leading: 35px;
+    line-height: 35px;
   }
   .leading-\[50px\] {
     --tw-leading: 50px;

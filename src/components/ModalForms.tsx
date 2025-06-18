@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Modal from "react-modal";
 import axios from "axios";
+import stringSimilarity from "string-similarity";
 
 const modal_styles = {
   content: {
@@ -189,9 +190,11 @@ function ModalAdd({
           type="submit"
           onClick={(e) => {
             e.preventDefault();
-            postImage();
-            closeModal();
-            resetState();
+            if (selected_image) {
+              postImage();
+              closeModal();
+              resetState();
+            }
           }}
           className="w-full cursor-pointer rounded-[5px] bg-accent p-[7.5px] my-[5px]"
         />
@@ -469,8 +472,39 @@ function ModalTranscript({
 }) {
   const [is_included, setIncluded] = useState<boolean[]>([]);
   useEffect(() => {
+    const carat_dict = {
+      "16K": "0.70",
+      "17K": "0.75",
+      "18K": "0.80",
+      "20K": "0.85",
+      "24K": "0.99",
+    };
+    const colors = ["rosegold", "gold", "whitegold", "silver"];
+    const stones = ["ruby", "diamond", "sapphire", "zircon", "emerald"];
+    const likely_string = (a: string, bs: string[]) => {
+      for (let b of bs) {
+        if (stringSimilarity.compareTwoStrings(a, b) > 0.6) {
+          return b;
+        }
+      }
+      return a;
+    };
     setIncluded(Array(transcript.length).fill(true));
-  }, [transcript]);
+    if (transcript[0][0]) {
+      let new_tr = transcript.slice();
+      for (let i in new_tr) {
+        [new_tr[i][2], new_tr[i][3]] = [
+          new_tr[i][3],
+          new_tr[i][2] && carat_dict[new_tr[i][2].toUpperCase()],
+        ];
+        new_tr[i][1] = likely_string(new_tr[i][1], colors);
+        new_tr[i][4] =
+          new_tr[i][4] === "-" ? "none" : likely_string(new_tr[i][4], stones);
+        new_tr[i][5] = new_tr[i][5] === "-" ? null : new_tr[i][5];
+      }
+      setTranscript(new_tr);
+    }
+  }, [is_open]);
   const postData = (state: string[], nextID: number) => {
     let document = {
       ID: Number(nextID),
@@ -479,12 +513,11 @@ function ModalTranscript({
       weight: Number(state[2]),
       purity: Number(state[3]),
       stones: state[4].toLowerCase(),
-      date_sold: null,
+      date_sold: new Date(state[5]),
       category: selected_category
         ? categories[selected_category].toLowerCase()
         : null,
     };
-    alert(JSON.stringify(document));
     axios.post("/api/items", document);
   };
   const postTranscript = async () => {
@@ -568,6 +601,7 @@ function ModalTranscript({
                       }
                       value={value}
                       type="text"
+                      onPaste={(e) => e.preventDefault()}
                       onChange={(e) => {
                         setTranscript(
                           transcript.toSpliced(
@@ -608,6 +642,7 @@ function ModalTranscript({
         className="text-[20px] font-secondary font-semibold border-1 mt-[20px] w-[30vw] max-w-[300px] h-[40px] float-right relative right-[50px] rounded-[10px] border-none bg-accent hover:bg-accent-shade cursor-pointer "
         onClick={async (e) => {
           e.preventDefault();
+          closeModal();
           await postTranscript();
           update();
         }}

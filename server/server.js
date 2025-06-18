@@ -44,7 +44,18 @@ router.delete("/sessions/:token", (request, response) => {
 
 // Category API
 router.get("/api/statistics", (request, response) => {
-  MongoDB.count()
+  const aggregates = [
+    {
+      $group: {
+        _id: "$category",
+        count: { $sum: 1 },
+        weight: { $sum: "$weight" },
+        sold: { $sum: { $cond: ["$date_sold", 1, 0] } },
+      },
+    },
+    { $sort: { _id: 1 } },
+  ];
+  MongoDB.count(aggregates)
     .then((results) => results.toArray())
     .then((data) => {
       console.log("Statistics retrieved.");

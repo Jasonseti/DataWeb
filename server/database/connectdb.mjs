@@ -30,23 +30,13 @@ function ping() {
   run().catch(console.dir);
 }
 
-function count() {
+function count(aggregates) {
   return new Promise((resolve, reject) => {
     let response;
     try {
       const db = client.db("Items");
       const collection = db.collection("items");
-      response = collection.aggregate([
-        {
-          $group: {
-            _id: "$category",
-            count: { $sum: 1 },
-            weight: { $sum: "$weight" },
-            sold: { $sum: { $cond: ["$date_sold", 1, 0] } },
-          },
-        },
-        { $sort: { category: 1 } },
-      ]);
+      response = collection.aggregate(aggregates);
     } finally {
       resolve(response);
     }

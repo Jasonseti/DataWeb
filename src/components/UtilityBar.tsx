@@ -136,12 +136,7 @@ function UtilityBar({
   const [is_tooltipEdit, setTooltipEdit] = useState(false);
   const [is_tooltipDelete, setTooltipDelete] = useState(false);
   const [is_openTranscript, toggleModalTranscript] = useToggle(false);
-  const [transcript, setTranscript] = useState<string[][]>([
-    ["Gelang Baby Gadjah HK", "rosegold", "5.5", "0.7", "ruby"],
-    ["Gelang Baby Gadjah HK", "rosegold", "5.5", "0.7", "ruby"],
-    ["Gelang Baby Gadjah HK", "rosegold", "5.5", "0.7", "ruby"],
-    ["Gelang Baby Gadjah HK", "rosegold", "5.5", "0.7", "ruby"],
-  ]);
+  const [transcript, setTranscript] = useState<string[][]>([[]]);
   const checkCheck = () => checked.indexOf(true) !== -1;
 
   return (
