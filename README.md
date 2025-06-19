@@ -19,15 +19,19 @@ Timeline:
 11-06 / Re-learning Tensorflow and Python
 12-06 / Setup Python Environment in VSCode
 13-06 / Tesseract OCR + Keras OCR
-14-06 / Building and Testing
-15-06 / Hosting + Final
+14-06 / CV2 East + Transformer
+16-06 / CV2 Contour + Tensorflow
+17-06 / Input data using Image
+18-06 / Final Touch, Building, and Testing
+19-06 / Hosting + Final Report
+20-06 / Presentasi
 
 Plugins Used:
 HTML: React
 CSS: PostCSS, Tailwind
 JS: ESLint-g, Typescript
 
-Server-side: NodeJS-g, lodash, Tesseract, TrOCR, EAST
+Server-side: NodeJS-g, Tesseract, Tensorflow
 API: Express, Cors, Axios, fastapi, uvicorn, Thunder Client
 Authorization: JWT
 Database: MongoDB, Snappy

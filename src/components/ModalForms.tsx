@@ -316,7 +316,7 @@ function ModalEdit({
       weight: Number(state[2]),
       purity: Number(state[3]),
       stones: state[4].toLowerCase(),
-      date_sold: new Date(state[5]),
+      date_sold: state[5] ? new Date(state[5]) : null,
       category: state[6].toLowerCase(),
     };
     axios.put("/api/items", document).then(() => update());
@@ -513,7 +513,7 @@ function ModalTranscript({
       weight: Number(state[2]),
       purity: Number(state[3]),
       stones: state[4].toLowerCase(),
-      date_sold: new Date(state[5]),
+      date_sold: state[5] ? new Date(state[5]) : null,
       category: selected_category
         ? categories[selected_category].toLowerCase()
         : null,
@@ -524,7 +524,7 @@ function ModalTranscript({
     let nextID = await axios
       .get("/api/items/id")
       .then((results) => results.data.ID);
-    for (let i in transcript) {
+    for (let i in await transcript) {
       if (is_included[i]) {
         nextID = nextID + 1;
         postData(transcript[i], nextID);
@@ -642,8 +642,8 @@ function ModalTranscript({
         className="text-[20px] font-secondary font-semibold border-1 mt-[20px] w-[30vw] max-w-[300px] h-[40px] float-right relative right-[50px] rounded-[10px] border-none bg-accent hover:bg-accent-shade cursor-pointer "
         onClick={async (e) => {
           e.preventDefault();
-          closeModal();
           await postTranscript();
+          closeModal();
           update();
         }}
       />
