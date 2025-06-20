@@ -4,7 +4,7 @@ import numpy as np
 import cv2, re
 
 def show_image(image):
-    ratio = min(800 / image.shape[0], 1600 / image.shape[1])
+    ratio = min(800 / image.shape[0], 800 / image.shape[1])
     cv2.imshow("", cv2.resize(image, [0, 0], fx=ratio, fy=ratio))
     cv2.waitKey()
     

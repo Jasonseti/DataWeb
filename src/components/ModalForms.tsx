@@ -132,11 +132,14 @@ function ModalAdd({
           color: state[1].toLowerCase(),
           weight: Number(state[2]),
           purity: Number(state[3]),
-          stones: state[4].toLowerCase(),
+          stones: state[4] ? state[4].toLowerCase() : "none",
           date_sold: null,
-          category: selected_category
-            ? categories[selected_category].toLowerCase()
-            : null,
+          category:
+            categories[selected_category] === "Mix"
+              ? state[5] !== "mix"
+                ? state[5].toLowerCase()
+                : null
+              : categories[selected_category].toLowerCase(),
         };
         return document;
       })
@@ -315,7 +318,7 @@ function ModalEdit({
       color: state[1].toLowerCase(),
       weight: Number(state[2]),
       purity: Number(state[3]),
-      stones: state[4].toLowerCase(),
+      stones: state[4] ? state[4].toLowerCase() : "none",
       date_sold: state[5] ? new Date(state[5]) : null,
       category: state[6].toLowerCase(),
     };
@@ -479,15 +482,18 @@ function ModalTranscript({
       "20K": "0.85",
       "24K": "0.99",
     };
-    const colors = ["rosegold", "gold", "whitegold", "silver"];
+    const colors = ["whitegold", "rosegold", "gold", "silver"];
     const stones = ["ruby", "diamond", "sapphire", "zircon", "emerald"];
     const likely_string = (a: string, bs: string[]) => {
+      let str = "";
+      let p = 0.0;
       for (let b of bs) {
-        if (stringSimilarity.compareTwoStrings(a, b) > 0.6) {
-          return b;
+        if (stringSimilarity.compareTwoStrings(a, b) > p) {
+          str = b;
+          p = stringSimilarity.compareTwoStrings(a, b);
         }
       }
-      return a;
+      return p > 0.5 ? str : a;
     };
     setIncluded(Array(transcript.length).fill(true));
     if (transcript[0][0]) {
@@ -512,7 +518,7 @@ function ModalTranscript({
       color: state[1].toLowerCase(),
       weight: Number(state[2]),
       purity: Number(state[3]),
-      stones: state[4].toLowerCase(),
+      stones: state[4] ? state[4].toLowerCase() : "none",
       date_sold: state[5] ? new Date(state[5]) : null,
       category: selected_category
         ? categories[selected_category].toLowerCase()

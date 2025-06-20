@@ -73,7 +73,7 @@ function TableBody({ data_items, checked, setChecked }) {
       <div
         onLoad={(e) => updateScrollbar(e)}
         onScroll={(e) => updateScrollbar(e)}
-        className="max-h-[700px] overflow-auto no-scrollbar"
+        className="max-h-[650px] overflow-auto no-scrollbar"
       >
         <table className="w-full">
           <TableItems
@@ -88,7 +88,7 @@ function TableBody({ data_items, checked, setChecked }) {
         id="scroll-bg"
         className={
           (!is_visible && "opacity-0 transition-[opacity] duration-500") +
-          " float-right relative bottom-[700px] -mb-[700px] h-[700px] inline-block bg-black/20 w-[16px]"
+          " float-right relative bottom-[650px] -mb-[650px] h-[650px] inline-block bg-black/20 w-[16px]"
         }
       >
         <div

@@ -21,7 +21,7 @@ def read_image(image: UploadFile = File(...)):
     try:
         image = image.file.read()
         image = Image.open(BytesIO(image))
-        transcript = tf.ocr(image)
+        transcript = tf.ocr(image, view_segments=True)
         response = { "transcript": transcript }
         return JSONResponse(content=jsonable_encoder(response), status_code=status.HTTP_200_OK)
     except (HTTPException):

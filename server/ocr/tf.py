@@ -144,9 +144,9 @@ def segment_and_read_image(model, image, box_clusters, view_segments=False):
         text = model.predict(letters, invert=True) if len(letters) > 0 else ""
         text = "".join(text)
         if j in [0, 1, 4]:
-            text = replace_letters(text, {'.': 'o', '9': 'g', '1': 'l'})
+            text = replace_letters(text, {'.': 'o', '9': 'g', '1': 'l', '2': 'a'})
         if j in [2, 3, 5]:
-            text = replace_letters(text, {'L': '1', 'l': '1', 'o': '0', 'O': '0'})
+            text = replace_letters(text, {'L': '1', 'l': '1', 'o': '0', 'O': '0', 'g': '9'})
         if j in [1, 4, 5]:
             text = text.lower() 
         if j in [0]:
@@ -190,7 +190,7 @@ def ocr(image, view_segments=False):
     image = preprocess_image(image)
     
     boxes = find_boxes(image)
-    box_clusters = cluster_and_sort_boxes(boxes, k=4)
+    box_clusters = cluster_and_sort_boxes(boxes, k=4) # Need to automate this
     
     transcript = segment_and_read_image(
         OCR, image, box_clusters, view_segments=view_segments
@@ -198,6 +198,6 @@ def ocr(image, view_segments=False):
     
     return transcript
 
-# image = cv2.imread("./server/ocr/sample/final.jpeg")
+# image = cv2.imread("./server/ocr/sample/sample_3.jpeg")
 # transcript = ocr(image, view_segments=True)
 # print(transcript)
